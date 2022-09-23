@@ -15,13 +15,14 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { Archive } from "../archive/Archive";
 import { NewRoast } from "../newRoast/NewRoast";
-import Dashboard from "./Dashboard";
+import { Dashboard } from "./Dashboard";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import HomeIcon from "@mui/icons-material/Home";
 import ListItemText from "@mui/material/ListItemText";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Settings } from "../settings/Settings";
+import logo from "../../assets/RoastieLogo.svg";
 
 const drawerWidth: number = 240;
 
@@ -73,7 +74,16 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-const mdTheme = createTheme();
+const mdTheme = createTheme({
+  palette: {
+    primary: {
+      main: "#2596be",
+    },
+    secondary: {
+      main: "#edf2ff",
+    },
+  },
+});
 
 export const Skeleton: FunctionComponent = () => {
   const [open, setOpen] = React.useState(true);
@@ -130,7 +140,6 @@ export const Skeleton: FunctionComponent = () => {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {" "}
             <ListItemButton onClick={() => navigate("/")}>
               <ListItemIcon>
                 <HomeIcon />
@@ -144,6 +153,7 @@ export const Skeleton: FunctionComponent = () => {
               <ListItemText primary="Einstellungen" />
             </ListItemButton>
           </List>
+          <img src={logo} style={{ margin: "auto 5px 10px 5px" }} />
         </Drawer>
         <Box
           component="main"

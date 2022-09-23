@@ -3,18 +3,18 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Chart from "./Chart";
-import Orders from "./Orders";
-import { Details } from "./Details";
+import { ArchiveTable } from "./ArchiveTable";
+import { SwitchDetailsSave } from "./SwitchDetailsSave";
 
-export function DashboardContent() {
+export function Dashboard() {
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-      <Grid container spacing={3}>
+      <Grid container spacing={1}>
         {/* Chart */}
-        <Grid item xs={10}>
+        <Grid item xs={9}>
           <Paper
             sx={{
-              p: 2,
+              p: 1,
               display: "flex",
               flexDirection: "column",
               height: 420,
@@ -23,18 +23,14 @@ export function DashboardContent() {
             <Chart />
           </Paper>
         </Grid>
-        <Details />
+        <SwitchDetailsSave />
         {/* Recent Orders */}
         <Grid item xs={12}>
-          <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-            <Orders />
+          <Paper sx={{ p: 1, display: "flex", flexDirection: "column" }}>
+            <ArchiveTable />
           </Paper>
         </Grid>
       </Grid>
     </Container>
   );
-}
-
-export default function Dashboard() {
-  return <DashboardContent />;
 }

@@ -1,5 +1,5 @@
 export type Roast = {
-  id: string;
+  id?: string;
   name: string;
   rating: number;
   data: TimeSeries[];

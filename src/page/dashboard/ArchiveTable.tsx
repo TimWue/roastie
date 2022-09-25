@@ -10,9 +10,11 @@ import { Roast } from "../../domain/Roast";
 import { Button, Rating } from "@mui/material";
 import { roastRepository } from "../../domain/RoastRepository";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { Export } from "./Export";
 
 export const ArchiveTable: FunctionComponent = () => {
   const [roasts, setRoasts] = useState<Roast[]>();
+  const [showExport, setShowExport] = useState(false);
 
   const deleteRoast = (id: string) => {
     return roastRepository.deleteRoast(id);
@@ -58,6 +60,8 @@ export const ArchiveTable: FunctionComponent = () => {
             ))}
         </TableBody>
       </Table>
+      <Button onClick={() => setShowExport(true)}>Export</Button>
+      <Export isOpen={showExport} close={() => setShowExport(false)} />
     </>
   );
 };

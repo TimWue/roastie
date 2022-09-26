@@ -21,7 +21,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import HomeIcon from "@mui/icons-material/Home";
 import ListItemText from "@mui/material/ListItemText";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Settings } from "../settings/Settings";
+import { SettingsManagement } from "../settings/SettingsManagement";
 import logo from "../../assets/RoastieLogo.svg";
 
 const drawerWidth: number = 240;
@@ -173,7 +173,7 @@ export const Skeleton: FunctionComponent = () => {
             <Route path="/" element={<Dashboard />} />
             <Route path="/archive" element={<Archive />} />
             <Route path="/roast" element={<NewRoast />} />
-            <Route path="/settings" element={<Settings />} />
+            <Route path="/settings" element={<SettingsManagement />} />
           </Routes>
         </Box>
       </Box>

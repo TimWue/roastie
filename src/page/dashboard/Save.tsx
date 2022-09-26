@@ -2,8 +2,8 @@ import * as React from "react";
 import { FunctionComponent, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Button, Rating, TextField, Typography } from "@mui/material";
-import { Roast } from "../../domain/Roast";
-import { roastRepository } from "../../domain/RoastRepository";
+import { Roast } from "../../domain/roast/Roast";
+import { roastRepository } from "../../domain/roast/RoastRepository";
 
 export const Save: FunctionComponent = () => {
   const [comment, setComment] = useState("");

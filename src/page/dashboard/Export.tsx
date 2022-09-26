@@ -9,19 +9,20 @@ interface Props {
   close: () => void;
 }
 
-export const Export: FunctionComponent<Props> = ({ isOpen }) => {
+export const Export: FunctionComponent<Props> = ({ isOpen, close }) => {
   const [blobUrl, setBlobUrl] = useState<string>();
   const [filename, setFilename] = useState<string>("Roastie-Backup");
 
   useEffect(() => {
     fileSystemAccess.exportDatabase().then(createUrlElement);
-  });
+  }, []);
 
   const createUrlElement = (blob: Blob) => {
     setBlobUrl(URL.createObjectURL(blob));
   };
+
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isOpen} onClose={() => close()}>
       <DialogTitle>Export</DialogTitle>
       <Grid
         container
@@ -43,7 +44,7 @@ export const Export: FunctionComponent<Props> = ({ isOpen }) => {
           />
         </Grid>
         <Grid item>
-          <Link href={blobUrl} download={filename}>
+          <Link href={blobUrl} download={filename} onClick={close}>
             Download
           </Link>
         </Grid>

@@ -1,5 +1,5 @@
 import { Roast } from "./Roast";
-import { db } from "../infrastructure/db";
+import { roastDatabase } from "../../infrastructure/roastDatabase";
 
 interface RoastRepository {
   addRoast: (roast: Roast) => Promise<any>;
@@ -9,12 +9,12 @@ interface RoastRepository {
 
 export const roastRepository: RoastRepository = {
   addRoast: (newRoast: Roast) => {
-    return db.roasts.add(newRoast);
+    return roastDatabase.roasts.add(newRoast);
   },
   getAllRoasts: () => {
-    return db.roasts.toArray();
+    return roastDatabase.roasts.toArray();
   },
   deleteRoast: (id: string) => {
-    return db.roasts.delete(id);
+    return roastDatabase.roasts.delete(id);
   },
 };

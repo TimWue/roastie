@@ -6,23 +6,28 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
-import { Roast } from "../../domain/Roast";
-import { Button, Rating } from "@mui/material";
-import { roastRepository } from "../../domain/RoastRepository";
+import { Roast } from "../../domain/roast/Roast";
+import { Button, Rating, Tooltip } from "@mui/material";
+import { roastRepository } from "../../domain/roast/RoastRepository";
 import DeleteIcon from "@mui/icons-material/Delete";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { Export } from "./Export";
+import Grid from "@mui/material/Grid";
 
 export const ArchiveTable: FunctionComponent = () => {
   const [roasts, setRoasts] = useState<Roast[]>();
   const [showExport, setShowExport] = useState(false);
 
-  const deleteRoast = (id: string) => {
-    return roastRepository.deleteRoast(id);
+  const loadRoasts = () => {
+    roastRepository.getAllRoasts().then((newRoasts) => setRoasts(newRoasts));
   };
 
-  useEffect(() => {
-    roastRepository.getAllRoasts().then((newRoasts) => setRoasts(newRoasts));
-  }, [deleteRoast]);
+  const deleteRoast = (id: string) => {
+    return roastRepository.deleteRoast(id).then(loadRoasts);
+  };
+
+  useEffect(loadRoasts, []);
 
   return (
     <>
@@ -52,16 +57,31 @@ export const ArchiveTable: FunctionComponent = () => {
                   <Rating readOnly size={"small"} value={roast.rating} />
                 </TableCell>
                 <TableCell>
-                  <Button>
-                    <DeleteIcon onClick={() => deleteRoast(roast.id!)} />
+                  <Button onClick={() => deleteRoast(roast.id!)}>
+                    <Tooltip title="Löschen">
+                      <DeleteIcon />
+                    </Tooltip>
                   </Button>
                 </TableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
-      <Button onClick={() => setShowExport(true)}>Export</Button>
-      <Export isOpen={showExport} close={() => setShowExport(false)} />
+      <Grid container direction={"row"} justifyContent={"end"}>
+        <Button onClick={loadRoasts}>
+          <Tooltip title="Aktualisieren">
+            <RefreshIcon />
+          </Tooltip>
+        </Button>
+        <Button onClick={() => setShowExport(true)}>
+          <Tooltip title="Export">
+            <FileDownloadIcon />
+          </Tooltip>
+        </Button>
+      </Grid>
+      {showExport && (
+        <Export isOpen={showExport} close={() => setShowExport(false)} />
+      )}
     </>
   );
 };

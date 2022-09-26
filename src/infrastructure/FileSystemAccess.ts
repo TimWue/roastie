@@ -1,5 +1,5 @@
 import { exportDB } from "dexie-export-import";
-import { db } from "./db";
+import { roastDatabase } from "./roastDatabase";
 
 interface FileSystemAccess {
   exportDatabase: () => Promise<Blob>;
@@ -7,6 +7,6 @@ interface FileSystemAccess {
 
 export const fileSystemAccess: FileSystemAccess = {
   exportDatabase: async () => {
-    return await exportDB(db);
+    return await exportDB(roastDatabase);
   },
 };

@@ -1,14 +1,11 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
-import { Skeleton } from "./page/dashboard/Skeleton";
+import { ContentFrame } from "./page/ContentFrame/ContentFrame";
 
 function App() {
   return (
     <BrowserRouter>
-      <Skeleton />
-      {/*
-      <Navigation />
-*/}
+      <ContentFrame />
     </BrowserRouter>
   );
 }

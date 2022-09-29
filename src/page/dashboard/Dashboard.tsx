@@ -2,8 +2,8 @@ import * as React from "react";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Chart from "./Chart";
-import { ArchiveTable } from "./ArchiveTable";
+import Chart from "../chart/Chart";
+import { ArchiveTable } from "../archive/ArchiveTable";
 import { SwitchDetailsSave } from "./SwitchDetailsSave";
 
 export function Dashboard() {

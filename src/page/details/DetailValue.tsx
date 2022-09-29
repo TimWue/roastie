@@ -1,7 +1,7 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
 import Typography from "@mui/material/Typography";
-import Title from "./Title";
+import Title from "../shared/Title";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 

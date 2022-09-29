@@ -1,5 +1,5 @@
 import { exportDB } from "dexie-export-import";
-import { roastDatabase } from "./roastDatabase";
+import { roastDatabase } from "./RoastDatabase";
 
 interface FileSystemAccess {
   exportDatabase: () => Promise<Blob>;

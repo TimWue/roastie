@@ -1,17 +1,21 @@
-import { connect } from "mqtt";
+import { connect, MqttClient } from "mqtt";
 
-const client = connect("mqtt://test.mosquitto.org");
+class MqttClientConnection {
+  private client: MqttClient;
 
-client.on("connect", function () {
-  client.subscribe("presence", function (err) {
-    if (!err) {
-      client.publish("presence", "Hello mqtt");
-    }
-  });
-});
+  constructor(host: string) {
+    this.client = connect(host);
+  }
 
-client.on("message", function (topic, message) {
-  // message is Buffer
-  console.log(message.toString());
-  client.end();
-});
+  public subscribe(
+    topic: string,
+    handler: (topic: string, message: string) => void
+  ) {
+    this.client.subscribe(topic, (err, granted) => {
+      console.error(err.message);
+    });
+    this.client.on("message", function (topic, message) {
+      handler(topic, message.toString());
+    });
+  }
+}

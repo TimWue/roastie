@@ -1,0 +1,13 @@
+version: '3'
+services:
+  mosquitto-broker:
+    image: eclipse-mosquitto
+    container_name: mqtt
+    restart: always
+    volumes:
+      - .\mqtt\com.timwue.roastie.backend.config:/mosquitto/com.timwue.roastie.backend.config
+      - .\mqtt\data:/mosquitto/data
+      - .\mqtt\log:/mosquitto/log
+    ports:
+      - "8000:8000"
+      - "1883:1883"

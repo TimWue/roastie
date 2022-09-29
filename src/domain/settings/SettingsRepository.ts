@@ -1,5 +1,5 @@
 import { Settings } from "./Settings";
-import { settingsDatabase } from "../../infrastructure/settingsDatabase";
+import { settingsDatabase } from "../../infrastructure/SettingsDatabase";
 
 interface SettingsRepository {
   updateSettings: (mqttSettings: Settings) => Promise<void>;

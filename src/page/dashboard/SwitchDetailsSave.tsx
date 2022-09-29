@@ -2,8 +2,8 @@ import { FunctionComponent, ReactNode, useState } from "react";
 import Box from "@mui/material/Box";
 import { Grid, Tab, Tabs } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { Details } from "./Details";
-import { Save } from "./Save";
+import { Details } from "../details/Details";
+import { Save } from "../saveRoast/Save";
 
 type Props = {
   children: ReactNode;

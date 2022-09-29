@@ -1,5 +1,5 @@
 import { Roast } from "./Roast";
-import { roastDatabase } from "../../infrastructure/roastDatabase";
+import { roastDatabase } from "../../infrastructure/RoastDatabase";
 
 interface RoastRepository {
   addRoast: (roast: Roast) => Promise<any>;

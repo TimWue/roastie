@@ -14,13 +14,13 @@ import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
-import { Settings } from "../../domain/settings/Settings";
+import { Settings, Topic } from "../../domain/settings/Settings";
+import { TopicList } from "./TopicList";
 
 export const SettingsManagement: FunctionComponent = ({}) => {
   const [host, setHost] = useState("mqtt://test.mosquitto.org");
-  const [topics, setTopics] = useState<string[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<string>("");
 
   const handleHostChange = (event: ChangeEvent<any>) => {
@@ -32,10 +32,20 @@ export const SettingsManagement: FunctionComponent = ({}) => {
     setTopics(newTopics);
   };
 
-  const updateTopic = (topicName: string, index: number) => {
+  const updateTopicName = (topicName: string, index: number) => {
     const newTopics = topics.map((topic, idx) => {
       if (idx === index) {
-        topic = topicName;
+        topic.name = topicName;
+      }
+      return topic;
+    });
+    setTopics(newTopics);
+  };
+
+  const updateTopicColor = (topicColor: string, index: number) => {
+    const newTopics = topics.map((topic, idx) => {
+      if (idx === index) {
+        topic.color = topicColor;
       }
       return topic;
     });
@@ -51,6 +61,10 @@ export const SettingsManagement: FunctionComponent = ({}) => {
       }
     });
   }, []);
+
+  const addNewTopic = () => {
+    setTopics([...topics, { name: "", color: "#000000" }]);
+  };
 
   const saveSettings = async () => {
     if (!selectedTopic) {
@@ -92,43 +106,16 @@ export const SettingsManagement: FunctionComponent = ({}) => {
               </Grid>
             </Grid>
 
-            <Grid
-              container
-              columnSpacing={"50px"}
-              alignItems={"center"}
-              flexWrap={"nowrap"}
-            >
+            <Grid container columnSpacing={"50px"} flexWrap={"wrap"}>
               <Grid item>
                 <InputLabel htmlFor="outlined-adornment-amount">
                   Topics
                 </InputLabel>
               </Grid>
-              {topics.map((topic, index) => {
-                return (
-                  <Grid item>
-                    <Input
-                      endAdornment={
-                        <Tooltip title={"Löschen"}>
-                          <Button onClick={() => deleteTopic(index)}>
-                            <DeleteIcon />
-                          </Button>
-                        </Tooltip>
-                      }
-                      value={topic}
-                      onChange={(event) => {
-                        updateTopic(event.currentTarget.value, index);
-                      }}
-                    />
-                  </Grid>
-                );
-              })}
+              <TopicList topics={topics} setTopics={setTopics} />
               <Grid item></Grid>
               <Tooltip title={"Topic hinzufügen"}>
-                <Button
-                  onClick={() => {
-                    setTopics([...topics, ""]);
-                  }}
-                >
+                <Button onClick={addNewTopic}>
                   <AddCircleIcon />
                 </Button>
               </Tooltip>
@@ -167,10 +154,10 @@ export const SettingsManagement: FunctionComponent = ({}) => {
                   {topics.map((topic) => {
                     return (
                       <MenuItem
-                        value={topic}
-                        onClick={() => setSelectedTopic(topic)}
+                        value={topic.name}
+                        onClick={() => setSelectedTopic(topic.name)}
                       >
-                        {topic}
+                        {topic.name}
                       </MenuItem>
                     );
                   })}

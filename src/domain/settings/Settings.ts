@@ -1,6 +1,11 @@
+export type Topic = {
+  name: string;
+  color: string;
+};
+
 export type MqttSettings = {
   host: string;
-  topics: string[];
+  topics: Topic[];
 };
 
 export type DetailSettings = {

@@ -3,9 +3,9 @@ import { useTheme } from "@mui/material/styles";
 import {
   CartesianGrid,
   Legend,
-  Line,
-  LineChart,
   ResponsiveContainer,
+  Scatter,
+  ScatterChart,
   Tooltip,
   XAxis,
   YAxis,
@@ -34,7 +34,7 @@ export default function Chart() {
     <>
       <Title>Aktuelle Röstung</Title>
       <ResponsiveContainer>
-        <LineChart
+        <ScatterChart
           width={730}
           height={250}
           margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
@@ -53,28 +53,26 @@ export default function Chart() {
             xAxisId={"2"}
             domain={[0, 150]}
             type={"number"}
-            hide
           />
           <YAxis dataKey="y" name="weight" unit="kg" />
           <Tooltip cursor={{ strokeDasharray: "3 3" }} />
           <Legend />
-          <Line
+          <Scatter
             name="Sensor1"
             data={data01}
-            dataKey={"y"}
+            fill="#8884d8"
             xAxisId={"1"}
-            type="monotone"
-            stroke="#82ca9d"
+            line
           />
-          <Line
+
+          <Scatter
             name="Sensor2"
             data={data02}
-            dataKey={"y"}
+            fill="#82ca9d"
             xAxisId={"2"}
-            type="monotone"
-            stroke="#8884d8"
+            line
           />
-        </LineChart>
+        </ScatterChart>
       </ResponsiveContainer>
     </>
   );

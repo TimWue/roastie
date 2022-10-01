@@ -5,7 +5,7 @@ services:
     container_name: mqtt
     restart: always
     volumes:
-      - .\mqtt\com.timwue.roastie.backend.config:/mosquitto/com.timwue.roastie.backend.config
+      - .\mqtt\config:/mosquitto/config/
       - .\mqtt\data:/mosquitto/data
       - .\mqtt\log:/mosquitto/log
     ports:

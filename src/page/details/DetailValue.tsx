@@ -1,25 +1,55 @@
 import * as React from "react";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Title from "../shared/Title";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-
-function preventDefault(event: React.MouseEvent) {
-  event.preventDefault();
-}
+import { settingsRepository } from "../../domain/settings/SettingsRepository";
+import { Topic } from "../../domain/settings/Settings";
+import { MqttClientConnection } from "../../infrastructure/MqttClient";
+import { Measurement } from "../../domain/roast/Roast";
 
 interface Props {
   title: string;
-  value: string;
   unit: string;
 }
 
-export const DetailValue: FunctionComponent<Props> = ({
-  title,
-  value,
-  unit,
-}) => {
+export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
+  const [selectedTopic, setSelectedTopic] = useState<Topic>();
+  const [value, setValue] = useState<number>();
+  const [host, setHost] = useState<string>();
+
+  const messageHandler = (topicName: string, message: Measurement) => {
+    if (selectedTopic && topicName === selectedTopic.name) {
+      const value = message.y;
+      setValue(value);
+    }
+  };
+
+  useEffect(() => {
+    settingsRepository.getSettings().then((settings) => {
+      setHost(settings.mqtt.host);
+      const topics = settings.mqtt.topics;
+      const selectedTopicName = settings.details.selectedTopic;
+      const selectedTopic = topics.find(
+        (topic) => topic.name == selectedTopicName
+      );
+
+      if (selectedTopic) {
+        setSelectedTopic(selectedTopic);
+      } else {
+        console.error("Topic [" + selectedTopicName + "] not found.");
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    if (host && selectedTopic) {
+      const mqtt = new MqttClientConnection(host);
+      mqtt.subscribe(selectedTopic.name, messageHandler);
+    }
+  }, [selectedTopic, host]);
+
   return (
     <Grid item xs={12}>
       <Paper

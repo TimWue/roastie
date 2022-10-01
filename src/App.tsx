@@ -1,11 +1,14 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import { ContentFrame } from "./page/ContentFrame/ContentFrame";
+import { MeasurementContextProvider } from "./infrastructure/MeasurementContext";
 
 function App() {
   return (
     <BrowserRouter>
-      <ContentFrame />
+      <MeasurementContextProvider>
+        <ContentFrame />
+      </MeasurementContextProvider>
     </BrowserRouter>
   );
 }

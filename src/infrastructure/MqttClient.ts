@@ -1,6 +1,7 @@
-import { connect, MqttClient } from "mqtt";
+import { connect, MqttClient } from "mqtt/dist/mqtt";
+import { Measurement } from "../domain/roast/Roast";
 
-class MqttClientConnection {
+export class MqttClientConnection {
   private client: MqttClient;
 
   constructor(host: string) {
@@ -9,13 +10,25 @@ class MqttClientConnection {
 
   public subscribe(
     topic: string,
-    handler: (topic: string, message: string) => void
+    handler: (topic: string, measurement: Measurement) => void
   ) {
-    this.client.subscribe(topic, (err, granted) => {
-      console.error(err.message);
+    this.client.subscribe(topic, (err: Error, granted) => {
+      err && console.log("MQTT Error: " + err.message);
+      console.log("MQTT Granted: " + JSON.stringify(granted));
     });
     this.client.on("message", function (topic, message) {
-      handler(topic, message.toString());
+      const messageObject = JSON.parse(message.toString()) as { y: string };
+      const measurement: Measurement = {
+        x: Date.now(),
+        y: Number(messageObject.y),
+      };
+
+      console.log("Received measurement: " + JSON.stringify(measurement));
+      handler(topic, measurement);
     });
+  }
+
+  public unsubscribe(topics: string[]) {
+    this.client.unsubscribe(topics);
   }
 }

@@ -17,3 +17,8 @@ export type TimeSeries = {
   values: DataPoint[];
   type: string;
 };
+
+export type Measurement = {
+  x: number;
+  y: number;
+};

@@ -1,12 +1,10 @@
 import * as React from "react";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Title from "../shared/Title";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import { settingsRepository } from "../../domain/settings/SettingsRepository";
 import { Topic } from "../../domain/settings/Settings";
-import { MqttClientConnection } from "../../infrastructure/MqttClient";
 import { Measurement } from "../../domain/roast/Roast";
 
 interface Props {
@@ -26,29 +24,29 @@ export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
     }
   };
 
-  useEffect(() => {
-    settingsRepository.getSettings().then((settings) => {
-      setHost(settings.mqtt.host);
-      const topics = settings.mqtt.topics;
-      const selectedTopicName = settings.details.selectedTopic;
-      const selectedTopic = topics.find(
-        (topic) => topic.name == selectedTopicName
-      );
-
-      if (selectedTopic) {
-        setSelectedTopic(selectedTopic);
-      } else {
-        console.error("Topic [" + selectedTopicName + "] not found.");
+  /*useEffect(() => {
+      settingsRepository.getSettings().then((settings) => {
+        setHost(settings.mqtt.host);
+        const topics = settings.mqtt.topics;
+        const selectedTopicName = settings.details.selectedTopic;
+        const selectedTopic = topics.find(
+          (topic) => topic.name == selectedTopicName
+        );
+  
+        if (selectedTopic) {
+          setSelectedTopic(selectedTopic);
+        } else {
+          console.error("Topic [" + selectedTopicName + "] not found.");
+        }
+      });
+    }, []);
+  
+    useEffect(() => {
+      if (host && selectedTopic) {
+        const mqtt = new MqttClientConnection(host);
+        mqtt.subscribe(selectedTopic.name, messageHandler);
       }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (host && selectedTopic) {
-      const mqtt = new MqttClientConnection(host);
-      mqtt.subscribe(selectedTopic.name, messageHandler);
-    }
-  }, [selectedTopic, host]);
+    }, [selectedTopic, host]);*/
 
   return (
     <Grid item xs={12}>

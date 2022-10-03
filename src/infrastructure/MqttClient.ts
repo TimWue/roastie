@@ -9,7 +9,7 @@ export class MqttClientConnection {
   }
 
   public subscribe(
-    topic: string,
+    topic: string | string[],
     handler: (topic: string, measurement: Measurement) => void
   ) {
     this.client.subscribe(topic, (err: Error, granted) => {

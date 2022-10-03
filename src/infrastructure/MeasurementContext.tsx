@@ -7,7 +7,7 @@ interface TopicsData {
 }
 
 interface ContextProps {
-  topicsData: TopicsData;
+  topicsData: Map<string, Measurement[]>;
   startMeasurement: (host: string, topicNames: string[]) => void;
   stopMeasurement: (topicNames: string[]) => void;
 }
@@ -23,25 +23,26 @@ interface ProviderProps {
 export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   children,
 }) => {
-  const [topicsData, setTopicsData] = useState<TopicsData>({});
+  const [topicsData, setTopicsData] = useState<Map<string, Measurement[]>>(
+    new Map()
+  );
   const [client, setClient] = useState<MqttClientConnection>(
     {} as MqttClientConnection
   );
 
+  const updateData = (topicName: string, measurements: Measurement[]) => {
+    setTopicsData(new Map(topicsData.set(topicName, measurements)));
+  };
+
   const handler = (topic: string, measurement: Measurement) => {
-    const currentData = topicsData[topic];
-    const topicData = currentData
-      ? [...currentData, measurement]
-      : [measurement];
-    const newData = topicsData;
-    newData[topic] = topicData;
-    console.log(newData);
-    setTopicsData(newData);
+    const currentData = topicsData.get(topic);
+    const newData = currentData ? [...currentData, measurement] : [measurement];
+    updateData(topic, newData);
   };
 
   const startMeasurement = (host: string, topicNames: string[]) => {
     const mqttClient = new MqttClientConnection(host);
-    topicNames.forEach((topicName) => mqttClient.subscribe(topicName, handler));
+    mqttClient.subscribe(topicNames, handler);
     setClient(mqttClient);
   };
 

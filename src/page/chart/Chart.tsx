@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
-import { useTheme } from "@mui/material/styles";
 import {
   CartesianGrid,
   Legend,
@@ -17,7 +16,6 @@ import { Topic } from "../../domain/settings/Settings";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
 
 export default function Chart() {
-  const theme = useTheme();
   const { topicsData } = useContext(MeasurementContext);
   const [topics, setTopics] = useState<Topic[]>();
 
@@ -27,11 +25,7 @@ export default function Chart() {
     });
   }, []);
 
-  useEffect(() => {
-    console.log(JSON.stringify(topicsData));
-  }, [topicsData]);
-
-  const domain = [1664654816744, 1664660820744];
+  const domain = [0, 60 * 60 * 20];
 
   return (
     <>
@@ -47,6 +41,10 @@ export default function Chart() {
           <Tooltip cursor={{ strokeDasharray: "3 3" }} />
           <Legend />
           {topics?.map((topic, index) => {
+            const topicData = topicsData.get(topic.name);
+            if (!topicData) {
+              return <></>;
+            }
             return (
               <>
                 <XAxis
@@ -55,11 +53,16 @@ export default function Chart() {
                   xAxisId={index}
                   domain={domain}
                   type={"number"}
-                  hide={index !== 1}
+                  hide={index !== 0}
                 />
                 <Line
                   name={topic.name}
-                  data={topicsData[topic.name]}
+                  data={topicData.map((measurement) => {
+                    return {
+                      x: measurement.x - topicData[0].x,
+                      y: measurement.y,
+                    };
+                  })}
                   dataKey={"y"}
                   xAxisId={index}
                   type="monotone"

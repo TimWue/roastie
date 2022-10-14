@@ -1,11 +1,11 @@
 import * as React from "react";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Title from "../shared/Title";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import { Topic } from "../../domain/settings/Settings";
-import { Measurement } from "../../domain/roast/Roast";
+import { settingsRepository } from "../../domain/settings/SettingsRepository";
+import { MeasurementContext } from "../../infrastructure/MeasurementContext";
 
 interface Props {
   title: string;
@@ -13,40 +13,21 @@ interface Props {
 }
 
 export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
-  const [selectedTopic, setSelectedTopic] = useState<Topic>();
+  const [selectedTopic, setSelectedTopic] = useState<string>();
   const [value, setValue] = useState<number>();
-  const [host, setHost] = useState<string>();
+  const { lastMeasurement } = useContext(MeasurementContext);
 
-  const messageHandler = (topicName: string, message: Measurement) => {
-    if (selectedTopic && topicName === selectedTopic.name) {
-      const value = message.y;
-      setValue(value);
+  useEffect(() => {
+    settingsRepository.getSettings().then((settings) => {
+      setSelectedTopic(settings.details.selectedTopic);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (lastMeasurement && lastMeasurement.topicName === selectedTopic) {
+      setValue(lastMeasurement.measurement.y);
     }
-  };
-
-  /*useEffect(() => {
-      settingsRepository.getSettings().then((settings) => {
-        setHost(settings.mqtt.host);
-        const topics = settings.mqtt.topics;
-        const selectedTopicName = settings.details.selectedTopic;
-        const selectedTopic = topics.find(
-          (topic) => topic.name == selectedTopicName
-        );
-  
-        if (selectedTopic) {
-          setSelectedTopic(selectedTopic);
-        } else {
-          console.error("Topic [" + selectedTopicName + "] not found.");
-        }
-      });
-    }, []);
-  
-    useEffect(() => {
-      if (host && selectedTopic) {
-        const mqtt = new MqttClientConnection(host);
-        mqtt.subscribe(selectedTopic.name, messageHandler);
-      }
-    }, [selectedTopic, host]);*/
+  }, [lastMeasurement]);
 
   return (
     <Grid item xs={12}>

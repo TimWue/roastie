@@ -15,9 +15,11 @@ import { MeasurementContext } from "../../infrastructure/MeasurementContext";
 import { Topic } from "../../domain/settings/Settings";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
 
+const DEFAULT_MEASUREMENT_LENGTH = 60 * 60 * 20;
 export default function Chart() {
-  const { topicsData } = useContext(MeasurementContext);
+  const { topicsData, startTime, maxTime } = useContext(MeasurementContext);
   const [topics, setTopics] = useState<Topic[]>();
+  const [maxDomain, setMaxDomain] = useState(DEFAULT_MEASUREMENT_LENGTH);
 
   useEffect(() => {
     settingsRepository.getSettings().then((settings) => {
@@ -25,7 +27,13 @@ export default function Chart() {
     });
   }, []);
 
-  const domain = [0, 60 * 60 * 20];
+  const updateMaxDomain = (startTime: number, maxTime: number) => {
+    setMaxDomain(Math.max(DEFAULT_MEASUREMENT_LENGTH, maxTime - startTime));
+  };
+
+  useEffect(() => {
+    startTime && maxTime && updateMaxDomain(startTime, maxTime);
+  }, [startTime, maxTime]);
 
   return (
     <>
@@ -51,15 +59,17 @@ export default function Chart() {
                   dataKey="x"
                   name="stature"
                   xAxisId={index}
-                  domain={domain}
+                  domain={[0, maxDomain]}
                   type={"number"}
                   hide={index !== 0}
                 />
                 <Line
+                  isAnimationActive={false}
+                  animateNewValues={false}
                   name={topic.name}
                   data={topicData.map((measurement) => {
                     return {
-                      x: measurement.x - topicData[0].x,
+                      x: measurement.x - (startTime ?? 0),
                       y: measurement.y,
                     };
                   })}

@@ -1,15 +1,28 @@
-import { createContext, FunctionComponent, ReactNode, useState } from "react";
+import {
+  createContext,
+  FunctionComponent,
+  ReactNode,
+  useEffect,
+  useState,
+} from "react";
 import { Measurement } from "../domain/roast/Roast";
 import { MqttClientConnection } from "./MqttClient";
 
-interface TopicsData {
-  [index: string]: Measurement[];
+export type TopicsData = Map<string, Measurement[]>;
+interface TopicMeasurement {
+  topicName: string;
+  measurement: Measurement;
 }
-
 interface ContextProps {
-  topicsData: Map<string, Measurement[]>;
-  startMeasurement: (host: string, topicNames: string[]) => void;
-  stopMeasurement: (topicNames: string[]) => void;
+  topicsData: TopicsData;
+  lastMeasurement: TopicMeasurement | undefined;
+  startMeasurement: () => void;
+  stopMeasurement: () => void;
+  subscribeToMeasurements: (host: string, topicNames: string[]) => void;
+  unsubscribeFromMeasurements: () => void;
+  measurementStarted: boolean;
+  startTime: number | undefined;
+  maxTime: number | undefined;
 }
 
 export const MeasurementContext = createContext<ContextProps>(
@@ -23,36 +36,79 @@ interface ProviderProps {
 export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   children,
 }) => {
-  const [topicsData, setTopicsData] = useState<Map<string, Measurement[]>>(
-    new Map()
-  );
-  const [client, setClient] = useState<MqttClientConnection>(
-    {} as MqttClientConnection
-  );
+  const [topicNames, setTopicNames] = useState<string[]>([]);
+  const [lastMeasurement, setLastMeasurement] = useState<TopicMeasurement>();
+  const [topicsData, setTopicsData] = useState<TopicsData>(new Map());
+  const [measurementStarted, setMeasurementStarted] = useState(false);
+  const [client, setClient] = useState<MqttClientConnection>();
+  const [startTime, setStartTime] = useState<number>();
+  const [maxTime, setMaxTime] = useState<number>();
 
   const updateData = (topicName: string, measurements: Measurement[]) => {
     setTopicsData(new Map(topicsData.set(topicName, measurements)));
   };
 
-  const handler = (topic: string, measurement: Measurement) => {
+  const handleMeasurements = (topic: string, measurement: Measurement) => {
+    setMaxTime(Date.now());
     const currentData = topicsData.get(topic);
     const newData = currentData ? [...currentData, measurement] : [measurement];
     updateData(topic, newData);
   };
 
-  const startMeasurement = (host: string, topicNames: string[]) => {
+  const handleNewMeasurement = (
+    topicName: string,
+    measurement: Measurement
+  ) => {
+    setLastMeasurement({ topicName, measurement });
+  };
+
+  const startMeasurement = () => {
+    setMeasurementStarted(true);
+    if (!startTime) {
+      setStartTime(Date.now());
+    }
+  };
+
+  const stopMeasurement = () => {
+    setMeasurementStarted(false);
+  };
+
+  const subscribeToMeasurements = (host: string, topicNames: string[]) => {
+    console.log("Subscribe to measurements. Topics: " + topicNames.join(", "));
+
+    setTopicNames(topicNames);
     const mqttClient = new MqttClientConnection(host);
-    mqttClient.subscribe(topicNames, handler);
+    mqttClient.subscribe(topicNames, handleNewMeasurement);
     setClient(mqttClient);
   };
 
-  const stopMeasurement = (topicNames: string[]) => {
-    client.unsubscribe(topicNames);
+  const unsubscribeFromMeasurements = () => {
+    console.log("Unsubscribe from measurements");
+    client && client.unsubscribe(topicNames);
   };
+
+  useEffect(() => {
+    if (lastMeasurement && measurementStarted) {
+      handleMeasurements(
+        lastMeasurement.topicName,
+        lastMeasurement.measurement
+      );
+    }
+  }, [lastMeasurement]);
 
   return (
     <MeasurementContext.Provider
-      value={{ startMeasurement, stopMeasurement, topicsData }}
+      value={{
+        startMeasurement,
+        stopMeasurement,
+        topicsData,
+        subscribeToMeasurements,
+        unsubscribeFromMeasurements,
+        lastMeasurement,
+        measurementStarted,
+        startTime,
+        maxTime,
+      }}
     >
       {children}
     </MeasurementContext.Provider>

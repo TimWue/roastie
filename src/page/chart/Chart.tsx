@@ -6,7 +6,6 @@ import {
   Line,
   LineChart,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
@@ -14,6 +13,8 @@ import Title from "../shared/Title";
 import { MeasurementContext } from "../../infrastructure/MeasurementContext";
 import { Topic } from "../../domain/settings/Settings";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
+import { Controls } from "../controls/Controls";
+import { Grid } from "@mui/material";
 
 const DEFAULT_MEASUREMENT_LENGTH = 60 * 60 * 20;
 export default function Chart() {
@@ -37,7 +38,11 @@ export default function Chart() {
 
   return (
     <>
-      <Title>Aktuelle Röstung</Title>
+      <Grid container direction={"row"} justifyContent={"space-between"}>
+        <Title>Aktuelle Röstung</Title>
+        <Controls />
+      </Grid>
+
       <ResponsiveContainer>
         <LineChart
           width={730}
@@ -45,13 +50,27 @@ export default function Chart() {
           margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <YAxis dataKey="y" name="weight" unit="kg" />
-          <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+          <YAxis
+            dataKey="y"
+            name="temperature"
+            unit="°C"
+            tickCount={5}
+            domain={[0, 200]}
+            hide={false}
+          />
           <Legend />
           {topics?.map((topic, index) => {
             const topicData = topicsData.get(topic.name);
             if (!topicData) {
-              return <></>;
+              return (
+                <XAxis
+                  dataKey="x"
+                  domain={[0, maxDomain]}
+                  type={"number"}
+                  interval={"preserveStartEnd"}
+                  tickCount={9}
+                />
+              );
             }
             return (
               <>
@@ -62,6 +81,7 @@ export default function Chart() {
                   domain={[0, maxDomain]}
                   type={"number"}
                   hide={index !== 0}
+                  tickCount={9}
                 />
                 <Line
                   isAnimationActive={false}

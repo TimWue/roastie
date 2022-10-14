@@ -18,6 +18,7 @@ interface ContextProps {
   lastMeasurement: TopicMeasurement | undefined;
   startMeasurement: () => void;
   stopMeasurement: () => void;
+  resetMeasurement: () => void;
   subscribeToMeasurements: (host: string, topicNames: string[]) => void;
   unsubscribeFromMeasurements: () => void;
   measurementStarted: boolean;
@@ -49,7 +50,10 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   };
 
   const handleMeasurements = (topic: string, measurement: Measurement) => {
-    setMaxTime(Date.now());
+    if (topicsData.size === 0 && !startTime) {
+      setStartTime(measurement.x);
+    }
+    setMaxTime(measurement.x);
     const currentData = topicsData.get(topic);
     const newData = currentData ? [...currentData, measurement] : [measurement];
     updateData(topic, newData);
@@ -64,9 +68,6 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
 
   const startMeasurement = () => {
     setMeasurementStarted(true);
-    if (!startTime) {
-      setStartTime(Date.now());
-    }
   };
 
   const stopMeasurement = () => {
@@ -75,7 +76,6 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
 
   const subscribeToMeasurements = (host: string, topicNames: string[]) => {
     console.log("Subscribe to measurements. Topics: " + topicNames.join(", "));
-
     setTopicNames(topicNames);
     const mqttClient = new MqttClientConnection(host);
     mqttClient.subscribe(topicNames, handleNewMeasurement);
@@ -85,6 +85,14 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   const unsubscribeFromMeasurements = () => {
     console.log("Unsubscribe from measurements");
     client && client.unsubscribe(topicNames);
+  };
+
+  const resetMeasurement = () => {
+    setStartTime(undefined);
+    setMaxTime(undefined);
+    setLastMeasurement(undefined);
+    setTopicsData(new Map());
+    setMeasurementStarted(false);
   };
 
   useEffect(() => {
@@ -101,6 +109,7 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
       value={{
         startMeasurement,
         stopMeasurement,
+        resetMeasurement,
         topicsData,
         subscribeToMeasurements,
         unsubscribeFromMeasurements,

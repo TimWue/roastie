@@ -15,7 +15,6 @@ export default function Title(props: TitleProps) {
       whiteSpace={"nowrap"}
       overflow={"hidden"}
       textOverflow={"ellipsis"}
-      width={"100%"}
       textAlign={"center"}
     >
       {props.children}

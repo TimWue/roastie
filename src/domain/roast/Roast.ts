@@ -8,17 +8,12 @@ export type Roast = {
   createdAt: number;
 };
 
-export type DataPoint = {
+export type Measurement = {
   x: number;
   y: number;
 };
 
 export type TimeSeries = {
-  values: DataPoint[];
-  type: string;
-};
-
-export type Measurement = {
-  x: number;
-  y: number;
+  name: string;
+  values: Measurement[];
 };

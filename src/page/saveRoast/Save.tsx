@@ -1,15 +1,28 @@
 import * as React from "react";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useContext, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Button, Rating, TextField, Typography } from "@mui/material";
-import { Roast } from "../../domain/roast/Roast";
+import { Roast, TimeSeries } from "../../domain/roast/Roast";
 import { roastRepository } from "../../domain/roast/RoastRepository";
+import {
+  MeasurementContext,
+  TopicsData,
+} from "../../infrastructure/MeasurementContext";
 
 export const Save: FunctionComponent = () => {
+  const { topicsData } = useContext(MeasurementContext);
   const [comment, setComment] = useState("");
   const [name, setName] = useState("");
   const [bean, setBean] = useState("");
   const [rating, setRating] = useState(0);
+
+  const topicsData2RoastData = (topicsData: TopicsData): TimeSeries[] => {
+    const data: TimeSeries[] = [];
+    topicsData.forEach((measurement, key) =>
+      data.push({ values: measurement, name: key })
+    );
+    return data;
+  };
 
   const save = () => {
     if (!(bean.length > 0 && name.length > 0)) {
@@ -21,7 +34,7 @@ export const Save: FunctionComponent = () => {
       bean: bean,
       comment: comment,
       createdAt: Date.now(),
-      data: [],
+      data: topicsData2RoastData(topicsData),
       name: name,
       rating: rating,
     };

@@ -24,6 +24,8 @@ interface ContextProps {
   measurementStarted: boolean;
   startTime: number | undefined;
   maxTime: number | undefined;
+  referenceMeasurement: TopicsData | undefined;
+  setReferenceMeasurement: (referenceMeasurement: TopicsData) => void;
 }
 
 export const MeasurementContext = createContext<ContextProps>(
@@ -40,6 +42,8 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   const [topicNames, setTopicNames] = useState<string[]>([]);
   const [lastMeasurement, setLastMeasurement] = useState<TopicMeasurement>();
   const [topicsData, setTopicsData] = useState<TopicsData>(new Map());
+  const [referenceMeasurement, setReferenceMeasurement] =
+    useState<TopicsData>();
   const [measurementStarted, setMeasurementStarted] = useState(false);
   const [client, setClient] = useState<MqttClientConnection>();
   const [startTime, setStartTime] = useState<number>();
@@ -117,6 +121,8 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
         measurementStarted,
         startTime,
         maxTime,
+        referenceMeasurement,
+        setReferenceMeasurement,
       }}
     >
       {children}

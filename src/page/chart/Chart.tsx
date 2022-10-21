@@ -15,10 +15,12 @@ import { Topic } from "../../domain/settings/Settings";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
 import { Controls } from "../controls/Controls";
 import { Grid } from "@mui/material";
+import { Measurement } from "../../domain/roast/Roast";
 
 const DEFAULT_MEASUREMENT_LENGTH = 60 * 60 * 20;
 export default function Chart() {
-  const { topicsData, startTime, maxTime } = useContext(MeasurementContext);
+  const { topicsData, startTime, maxTime, referenceMeasurement } =
+    useContext(MeasurementContext);
   const [topics, setTopics] = useState<Topic[]>();
   const [maxDomain, setMaxDomain] = useState(DEFAULT_MEASUREMENT_LENGTH);
 
@@ -61,48 +63,66 @@ export default function Chart() {
           <Legend />
           {topics?.map((topic, index) => {
             const topicData = topicsData.get(topic.name);
-            if (!topicData) {
-              return (
-                <XAxis
-                  dataKey="x"
-                  domain={[0, maxDomain]}
-                  type={"number"}
-                  interval={"preserveStartEnd"}
-                  tickCount={9}
-                />
-              );
-            }
-            return (
-              <>
-                <XAxis
-                  dataKey="x"
-                  name="stature"
-                  xAxisId={index}
-                  domain={[0, maxDomain]}
-                  type={"number"}
-                  hide={index !== 0}
-                  tickCount={9}
-                />
-                <Line
-                  isAnimationActive={false}
-                  animateNewValues={false}
-                  name={topic.name}
-                  data={topicData.map((measurement) => {
-                    return {
-                      x: measurement.x - (startTime ?? 0),
-                      y: measurement.y,
-                    };
-                  })}
-                  dataKey={"y"}
-                  xAxisId={index}
-                  type="monotone"
-                  stroke={topic.color}
-                />
-              </>
+            return putData(
+              index,
+              maxDomain,
+              topic.color,
+              index === 0,
+              topicData,
+              startTime
             );
           })}
+          {referenceMeasurement &&
+            topics &&
+            putData(
+              100,
+              maxDomain,
+              "blue", // probably better to use dashed lines
+              false,
+              referenceMeasurement.get(topics[1].name), // set topic in dialog
+              referenceMeasurement.get(topics[1].name)![0].x // set topic in dialog
+            )}
         </LineChart>
       </ResponsiveContainer>
     </>
   );
 }
+
+const putData = (
+  axisIndex: number,
+  maxDomain: number,
+  color: string,
+  showX: boolean,
+  topicData: Measurement[] | undefined,
+  startTime: number | undefined
+) => {
+  return (
+    <>
+      <XAxis
+        dataKey="x"
+        xAxisId={axisIndex}
+        domain={[0, maxDomain]}
+        type={"number"}
+        hide={!showX}
+        tickCount={9}
+      />
+
+      {topicData && (
+        <Line
+          isAnimationActive={false}
+          animateNewValues={false}
+          data={topicData.map((measurement) => {
+            return {
+              x: measurement.x - (startTime ?? 0),
+              y: measurement.y,
+            };
+          })}
+          dataKey={"y"}
+          xAxisId={axisIndex}
+          type="monotone"
+          stroke={color}
+        />
+      )}
+    </>
+  );
+};

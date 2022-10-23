@@ -16,6 +16,7 @@ import { settingsRepository } from "../../domain/settings/SettingsRepository";
 import { Controls } from "../controls/Controls";
 import { Grid } from "@mui/material";
 import { Measurement } from "../../domain/roast/Roast";
+import { ChartItem } from "./ChartItem";
 
 const DEFAULT_MEASUREMENT_LENGTH = 60 * 60 * 20;
 export default function Chart() {
@@ -62,14 +63,16 @@ export default function Chart() {
           />
           <Legend />
           {topics?.map((topic, index) => {
-            const topicData = topicsData.get(topic.name);
-            return putData(
-              index,
-              maxDomain,
-              topic.color,
-              index === 0,
-              topicData,
-              startTime
+            const measurements = topicsData.get(topic.name);
+            return (
+              <ChartItem
+                topicInformation={topic}
+                measurements={measurements}
+                index={index}
+                maxDomain={maxDomain}
+                showX={index === 0}
+                startTime={startTime}
+              />
             );
           })}
           {referenceMeasurement &&

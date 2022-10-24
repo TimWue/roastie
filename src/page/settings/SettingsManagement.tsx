@@ -15,35 +15,10 @@ import { SelectTopic } from "../shared/SelectTopic";
 export const SettingsManagement: FunctionComponent = ({}) => {
   const [host, setHost] = useState("mqtt://test.mosquitto.org");
   const [topics, setTopics] = useState<Topic[]>([]);
-  const [selectedTopic, setSelectedTopic] = useState<string>("");
+  const [selectedTopic, setSelectedTopic] = useState<string>();
 
   const handleHostChange = (event: ChangeEvent<any>) => {
     setHost(event.currentTarget.value);
-  };
-
-  const deleteTopic = (index: number) => {
-    const newTopics = topics.filter((topic, idx) => idx !== index);
-    setTopics(newTopics);
-  };
-
-  const updateTopicName = (topicName: string, index: number) => {
-    const newTopics = topics.map((topic, idx) => {
-      if (idx === index) {
-        topic.name = topicName;
-      }
-      return topic;
-    });
-    setTopics(newTopics);
-  };
-
-  const updateTopicColor = (topicColor: string, index: number) => {
-    const newTopics = topics.map((topic, idx) => {
-      if (idx === index) {
-        topic.color = topicColor;
-      }
-      return topic;
-    });
-    setTopics(newTopics);
   };
 
   useEffect(() => {

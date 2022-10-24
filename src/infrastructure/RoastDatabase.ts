@@ -1,8 +1,25 @@
 import Dexie, { Table } from "dexie";
-import { Roast } from "../domain/roast/Roast";
+import { Measurement } from "../domain/roast/Roast";
+
+type TimeSeries = {
+  name: string;
+  values: Measurement[];
+};
+
+export type RoastDataDto = TimeSeries[];
+
+export type RoastDto = {
+  id?: string;
+  name: string;
+  rating: number;
+  data: RoastDataDto;
+  comment?: string;
+  bean: string;
+  createdAt: number;
+};
 
 export class RoastDexie extends Dexie {
-  roasts!: Table<Roast>;
+  roasts!: Table<RoastDto>;
 
   constructor() {
     super("RoastieDatabase");

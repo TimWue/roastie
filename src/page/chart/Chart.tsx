@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useContext, useEffect, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -16,12 +16,14 @@ import { settingsRepository } from "../../domain/settings/SettingsRepository";
 import { Controls } from "../controls/Controls";
 import { Grid } from "@mui/material";
 import { Measurement } from "../../domain/roast/Roast";
-import { ChartItem } from "./ChartItem";
+import { ReferenceMeasurementContext } from "../../infrastructure/ReferenceMeasurementContext";
 
-const DEFAULT_MEASUREMENT_LENGTH = 60 * 60 * 20;
-export default function Chart() {
-  const { topicsData, startTime, maxTime, referenceMeasurement } =
-    useContext(MeasurementContext);
+const DEFAULT_MEASUREMENT_LENGTH = 60 * 60 * 20 * 10;
+export const Chart: FunctionComponent = () => {
+  const { roastData, startTime, maxTime } = useContext(MeasurementContext);
+  const { referenceTopicName, referenceMeasurements } = useContext(
+    ReferenceMeasurementContext
+  );
   const [topics, setTopics] = useState<Topic[]>();
   const [maxDomain, setMaxDomain] = useState(DEFAULT_MEASUREMENT_LENGTH);
 
@@ -63,40 +65,38 @@ export default function Chart() {
           />
           <Legend />
           {topics?.map((topic, index) => {
-            const measurements = topicsData.get(topic.name);
-            return (
-              <ChartItem
-                topicInformation={topic}
-                measurements={measurements}
-                index={index}
-                maxDomain={maxDomain}
-                showX={index === 0}
-                startTime={startTime}
-              />
+            const measurements = roastData.get(topic.name);
+            return putData(
+              index,
+              maxDomain,
+              topic,
+              index == 0,
+              measurements,
+              startTime
             );
           })}
-          {referenceMeasurement &&
-            topics &&
+          {referenceMeasurements &&
+            referenceTopicName &&
             putData(
               100,
               maxDomain,
-              "blue", // probably better to use dashed lines
+              { color: "blue", name: referenceTopicName + "(Ref.)" }, // probably better to use dashed lines
               false,
-              referenceMeasurement.get(topics[1].name), // set topic in dialog
-              referenceMeasurement.get(topics[1].name)![0].x // set topic in dialog
+              referenceMeasurements,
+              referenceMeasurements[0].x
             )}
         </LineChart>
       </ResponsiveContainer>
     </>
   );
-}
+};
 
 const putData = (
   axisIndex: number,
   maxDomain: number,
-  color: string,
+  topic: Topic,
   showX: boolean,
-  topicData: Measurement[] | undefined,
+  measurements: Measurement[] | undefined,
   startTime: number | undefined
 ) => {
   return (
@@ -110,11 +110,11 @@ const putData = (
         tickCount={9}
       />
 
-      {topicData && (
+      {measurements && (
         <Line
           isAnimationActive={false}
           animateNewValues={false}
-          data={topicData.map((measurement) => {
+          data={measurements.map((measurement) => {
             return {
               x: measurement.x - (startTime ?? 0),
               y: measurement.y,
@@ -123,7 +123,8 @@ const putData = (
           dataKey={"y"}
           xAxisId={axisIndex}
           type="monotone"
-          stroke={color}
+          stroke={topic.color}
+          name={topic.name}
         />
       )}
     </>

@@ -1,12 +1,12 @@
 import * as React from "react";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import { Topic } from "../../domain/settings/Settings";
 
-const DEFAULT = "";
+const DEFAULT = "---";
 interface Props {
   selectedTopic: string | undefined;
-  setSelectedTopic: (selectedTopic: string) => void;
+  setSelectedTopic: (selectedTopic: string | undefined) => void;
   topicNames: string[];
 }
 export const SelectTopic: FunctionComponent<Props> = ({
@@ -14,11 +14,14 @@ export const SelectTopic: FunctionComponent<Props> = ({
   setSelectedTopic,
   topicNames,
 }) => {
+  const [selectedTopicValue, setSelectedTopicValue] = useState(DEFAULT);
   const setTopic = (newTopic: string) => {
-    if (newTopic !== DEFAULT) {
-      setSelectedTopic(newTopic);
-    }
+    setSelectedTopic(newTopic === DEFAULT ? undefined : newTopic);
   };
+
+  useEffect(() => {
+    setSelectedTopicValue(selectedTopic ?? DEFAULT);
+  }, [selectedTopic]);
 
   return (
     <FormControl sx={{ m: 1, minWidth: 80 }}>
@@ -28,7 +31,7 @@ export const SelectTopic: FunctionComponent<Props> = ({
         variant={"standard"}
         labelId="selected-label"
         id="selected"
-        value={selectedTopic}
+        value={selectedTopicValue}
         label={"Topic"}
         onChange={(event) => setTopic(event.target.value)}
       >

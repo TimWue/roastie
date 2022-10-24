@@ -8,7 +8,7 @@ interface ContextProps {
   changeTopic: (topicIndex: number) => void;
 }
 
-export const MeasurementContext = createContext<ContextProps>(
+export const ReferenceMeasurementContext = createContext<ContextProps>(
   {} as ContextProps
 );
 
@@ -42,7 +42,7 @@ export const ReferenceMeasurementContextProvider: FunctionComponent<
   };
 
   return (
-    <MeasurementContext.Provider
+    <ReferenceMeasurementContext.Provider
       value={{
         referenceTimeSeries,
         remove,
@@ -51,6 +51,6 @@ export const ReferenceMeasurementContextProvider: FunctionComponent<
       }}
     >
       {children}
-    </MeasurementContext.Provider>
+    </ReferenceMeasurementContext.Provider>
   );
 };

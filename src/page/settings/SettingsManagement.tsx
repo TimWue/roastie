@@ -2,14 +2,7 @@ import * as React from "react";
 import { ChangeEvent, FunctionComponent, useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
-import {
-  Button,
-  Input,
-  InputLabel,
-  MenuItem,
-  Select,
-  Tooltip,
-} from "@mui/material";
+import { Button, Input, InputLabel, Tooltip } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
@@ -17,6 +10,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
 import { Settings, Topic } from "../../domain/settings/Settings";
 import { TopicList } from "./TopicList";
+import { SelectTopic } from "../shared/SelectTopic";
 
 export const SettingsManagement: FunctionComponent = ({}) => {
   const [host, setHost] = useState("mqtt://test.mosquitto.org");
@@ -142,26 +136,11 @@ export const SettingsManagement: FunctionComponent = ({}) => {
               </Grid>
 
               <Grid item>
-                <Select
-                  variant={"standard"}
-                  labelId="selected"
-                  id="selected"
-                  value={selectedTopic}
-                >
-                  <MenuItem value="">
-                    <em>Keine</em>
-                  </MenuItem>
-                  {topics.map((topic) => {
-                    return (
-                      <MenuItem
-                        value={topic.name}
-                        onClick={() => setSelectedTopic(topic.name)}
-                      >
-                        {topic.name}
-                      </MenuItem>
-                    );
-                  })}
-                </Select>
+                <SelectTopic
+                  selectedTopic={selectedTopic}
+                  setSelectedTopic={setSelectedTopic}
+                  topicNames={topics.map((topic) => topic.name)}
+                />
               </Grid>
             </Grid>
           </Paper>

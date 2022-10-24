@@ -6,24 +6,22 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "../shared/Title";
-import { Roast, TimeSeries } from "../../domain/roast/Roast";
+import { Roast } from "../../domain/roast/Roast";
 import { Button, Rating, Tooltip } from "@mui/material";
 import { roastRepository } from "../../domain/roast/RoastRepository";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import { Export } from "./Export";
 import Grid from "@mui/material/Grid";
-import {
-  MeasurementContext,
-  TopicsData,
-} from "../../infrastructure/MeasurementContext";
+import { SelectTopic } from "../shared/SelectTopic";
+import { ReferenceMeasurementContext } from "../../infrastructure/ReferenceMeasurementContext";
 
 export const ArchiveTable: FunctionComponent = () => {
   const [roasts, setRoasts] = useState<Roast[]>();
   const [showExport, setShowExport] = useState(false);
-  const { setReferenceMeasurement } = useContext(MeasurementContext);
+  const { update: updateReferenceMeasurement, referenceTimeSeries } =
+    useContext(ReferenceMeasurementContext);
 
   const loadRoasts = () => {
     roastRepository.getAllRoasts().then((newRoasts) => setRoasts(newRoasts));
@@ -34,18 +32,6 @@ export const ArchiveTable: FunctionComponent = () => {
   };
 
   useEffect(loadRoasts, []);
-
-  const timeSeries2TopicData = (timeseries: TimeSeries[]): TopicsData => {
-    const topicsData = new Map();
-    timeseries.forEach((series) => {
-      topicsData.set(series.name, series.values);
-    });
-    return topicsData;
-  };
-
-  const setRoastAsReferenceMeasurement = (roast: Roast) => {
-    setReferenceMeasurement(timeSeries2TopicData(roast.data));
-  };
 
   return (
     <>
@@ -58,6 +44,7 @@ export const ArchiveTable: FunctionComponent = () => {
             <TableCell>Bohne</TableCell>
             <TableCell>Datum</TableCell>
             <TableCell>Bewertung</TableCell>
+            <TableCell>Hinzufügen</TableCell>
             <TableCell />
           </TableRow>
         </TableHead>
@@ -75,14 +62,27 @@ export const ArchiveTable: FunctionComponent = () => {
                   <Rating readOnly size={"small"} value={roast.rating} />
                 </TableCell>
                 <TableCell>
+                  {/*todo: check that roast is selected roast + topic*/}
+                  {/*todo: setSelectedTopic not inline*/}
+                  <SelectTopic
+                    selectedTopic={
+                      referenceTimeSeries ? referenceTimeSeries.name : ""
+                    }
+                    setSelectedTopic={(topic: string) =>
+                      updateReferenceMeasurement(
+                        roast,
+                        roast.data
+                          .map((timeSeries) => timeSeries.name)
+                          .indexOf(topic)
+                      )
+                    }
+                    topicNames={roast.data.map((timeSeries) => timeSeries.name)}
+                  />
+                </TableCell>
+                <TableCell>
                   <Button onClick={() => deleteRoast(roast.id!)}>
                     <Tooltip title="Löschen">
                       <DeleteIcon />
-                    </Tooltip>
-                  </Button>
-                  <Button onClick={() => setRoastAsReferenceMeasurement(roast)}>
-                    <Tooltip title="Hinzufügen">
-                      <AddIcon />
                     </Tooltip>
                   </Button>
                 </TableCell>

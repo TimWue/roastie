@@ -2,7 +2,7 @@ export type Roast = {
   id?: string;
   name: string;
   rating: number;
-  data: TimeSeries[];
+  data: RoastData;
   comment?: string;
   bean: string;
   createdAt: number;
@@ -13,7 +13,4 @@ export type Measurement = {
   y: number;
 };
 
-export type TimeSeries = {
-  name: string;
-  values: Measurement[];
-};
+export type RoastData = Map<string, Measurement[]>;

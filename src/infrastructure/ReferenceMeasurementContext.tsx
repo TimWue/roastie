@@ -1,11 +1,13 @@
 import { createContext, FunctionComponent, ReactNode, useState } from "react";
-import { Roast, TimeSeries } from "../domain/roast/Roast";
+import { Measurement, Roast } from "../domain/roast/Roast";
+import { TopicName } from "../domain/settings/Settings";
 
 interface ContextProps {
-  referenceTimeSeries: TimeSeries | undefined;
-  update: (roast: Roast, topicIndex?: number) => void;
+  referenceTopicName: TopicName | undefined;
+  referenceMeasurements: Measurement[] | undefined;
+  update: (roast: Roast, topicName?: TopicName) => void;
   remove: () => void;
-  changeTopic: (topicIndex: number) => void;
+  changeTopicName: (topicName: TopicName) => void;
 }
 
 export const ReferenceMeasurementContext = createContext<ContextProps>(
@@ -20,22 +22,32 @@ export const ReferenceMeasurementContextProvider: FunctionComponent<
   ProviderProps
 > = ({ children }) => {
   const [referenceRoast, setReferenceRoast] = useState<Roast>();
-  const [referenceTimeSeries, setReferenceTimeSeries] = useState<TimeSeries>();
+  const [referenceMeasurements, setReferenceMeasurements] =
+    useState<Measurement[]>();
+  const [referenceTopicName, setReferenceTopicName] = useState<TopicName>();
 
-  const update = (roast: Roast, topicIndex?: number) => {
-    const initialIndex = topicIndex ?? 0;
-    setReferenceTimeSeries(roast.data[initialIndex]);
+  const update = (roast: Roast, topicName?: TopicName) => {
+    const initialTopicName = topicName ?? Array.from(roast.data.keys()).at(0);
+
+    if (!initialTopicName) {
+      throw new Error("Roast has no topic, which can be selected.");
+    }
+
+    setReferenceMeasurements(roast.data.get(initialTopicName));
+    setReferenceTopicName(initialTopicName);
     setReferenceRoast(roast);
   };
 
   const remove = () => {
-    setReferenceTimeSeries(undefined);
+    setReferenceMeasurements(undefined);
+    setReferenceTopicName(undefined);
     setReferenceRoast(undefined);
   };
 
-  const changeTopic = (topicIndex: number) => {
+  const changeTopic = (topicName: TopicName) => {
     if (referenceRoast) {
-      setReferenceTimeSeries(referenceRoast.data[topicIndex]);
+      setReferenceMeasurements(referenceRoast.data.get(topicName));
+      setReferenceTopicName(topicName);
     } else {
       throw new Error("No reference roast defined. Cannot change topic!");
     }
@@ -44,10 +56,11 @@ export const ReferenceMeasurementContextProvider: FunctionComponent<
   return (
     <ReferenceMeasurementContext.Provider
       value={{
-        referenceTimeSeries,
+        referenceTopicName,
+        referenceMeasurements,
         remove,
         update,
-        changeTopic,
+        changeTopicName: changeTopic,
       }}
     >
       {children}

@@ -16,12 +16,16 @@ import { Export } from "./Export";
 import Grid from "@mui/material/Grid";
 import { SelectTopic } from "../shared/SelectTopic";
 import { ReferenceMeasurementContext } from "../../infrastructure/ReferenceMeasurementContext";
+import { TopicName } from "../../domain/settings/Settings";
 
 export const ArchiveTable: FunctionComponent = () => {
   const [roasts, setRoasts] = useState<Roast[]>();
   const [showExport, setShowExport] = useState(false);
-  const { update: updateReferenceMeasurement, referenceTimeSeries } =
-    useContext(ReferenceMeasurementContext);
+  const {
+    update: updateReferenceMeasurement,
+    referenceTopicName,
+    remove: removeReferenceMeasurement,
+  } = useContext(ReferenceMeasurementContext);
 
   const loadRoasts = () => {
     roastRepository.getAllRoasts().then((newRoasts) => setRoasts(newRoasts));
@@ -62,21 +66,14 @@ export const ArchiveTable: FunctionComponent = () => {
                   <Rating readOnly size={"small"} value={roast.rating} />
                 </TableCell>
                 <TableCell>
-                  {/*todo: check that roast is selected roast + topic*/}
-                  {/*todo: setSelectedTopic not inline*/}
                   <SelectTopic
-                    selectedTopic={
-                      referenceTimeSeries ? referenceTimeSeries.name : ""
-                    }
-                    setSelectedTopic={(topic: string) =>
-                      updateReferenceMeasurement(
-                        roast,
-                        roast.data
-                          .map((timeSeries) => timeSeries.name)
-                          .indexOf(topic)
-                      )
-                    }
-                    topicNames={roast.data.map((timeSeries) => timeSeries.name)}
+                    selectedTopic={referenceTopicName}
+                    setSelectedTopic={(topicName: TopicName | undefined) => {
+                      topicName
+                        ? updateReferenceMeasurement(roast, topicName)
+                        : removeReferenceMeasurement();
+                    }}
+                    topicNames={Array.from(roast.data.keys())}
                   />
                 </TableCell>
                 <TableCell>

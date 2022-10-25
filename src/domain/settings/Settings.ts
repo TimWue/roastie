@@ -1,5 +1,7 @@
+export type TopicName = string;
+
 export type Topic = {
-  name: string;
+  name: TopicName;
   color: string;
 };
 
@@ -9,7 +11,7 @@ export type MqttSettings = {
 };
 
 export type DetailSettings = {
-  selectedTopic: string;
+  selectedTopic: TopicName;
 };
 
 export type Settings = {

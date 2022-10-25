@@ -5,16 +5,17 @@ import {
   useEffect,
   useState,
 } from "react";
-import { Measurement } from "../domain/roast/Roast";
+import { Measurement, RoastData } from "../domain/roast/Roast";
 import { MqttClientConnection } from "./MqttClient";
+import { TopicName } from "../domain/settings/Settings";
 
-export type TopicsData = Map<string, Measurement[]>;
 interface TopicMeasurement {
-  topicName: string;
+  topicName: TopicName;
   measurement: Measurement;
 }
+
 interface ContextProps {
-  topicsData: TopicsData;
+  roastData: RoastData;
   lastMeasurement: TopicMeasurement | undefined;
   startMeasurement: () => void;
   stopMeasurement: () => void;
@@ -24,8 +25,6 @@ interface ContextProps {
   measurementStarted: boolean;
   startTime: number | undefined;
   maxTime: number | undefined;
-  referenceMeasurement: TopicsData | undefined;
-  setReferenceMeasurement: (referenceMeasurement: TopicsData) => void;
 }
 
 export const MeasurementContext = createContext<ContextProps>(
@@ -41,24 +40,22 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
 }) => {
   const [topicNames, setTopicNames] = useState<string[]>([]);
   const [lastMeasurement, setLastMeasurement] = useState<TopicMeasurement>();
-  const [topicsData, setTopicsData] = useState<TopicsData>(new Map());
-  const [referenceMeasurement, setReferenceMeasurement] =
-    useState<TopicsData>();
+  const [roastData, setRoastData] = useState<RoastData>(new Map());
   const [measurementStarted, setMeasurementStarted] = useState(false);
   const [client, setClient] = useState<MqttClientConnection>();
   const [startTime, setStartTime] = useState<number>();
   const [maxTime, setMaxTime] = useState<number>();
 
   const updateData = (topicName: string, measurements: Measurement[]) => {
-    setTopicsData(new Map(topicsData.set(topicName, measurements)));
+    setRoastData(new Map(roastData.set(topicName, measurements)));
   };
 
   const handleMeasurements = (topic: string, measurement: Measurement) => {
-    if (topicsData.size === 0 && !startTime) {
+    if (roastData.size === 0 && !startTime) {
       setStartTime(measurement.x);
     }
     setMaxTime(measurement.x);
-    const currentData = topicsData.get(topic);
+    const currentData = roastData.get(topic);
     const newData = currentData ? [...currentData, measurement] : [measurement];
     updateData(topic, newData);
   };
@@ -95,7 +92,7 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
     setStartTime(undefined);
     setMaxTime(undefined);
     setLastMeasurement(undefined);
-    setTopicsData(new Map());
+    setRoastData(new Map());
     setMeasurementStarted(false);
   };
 
@@ -114,15 +111,13 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
         startMeasurement,
         stopMeasurement,
         resetMeasurement,
-        topicsData,
+        roastData,
         subscribeToMeasurements,
         unsubscribeFromMeasurements,
         lastMeasurement,
         measurementStarted,
         startTime,
         maxTime,
-        referenceMeasurement,
-        setReferenceMeasurement,
       }}
     >
       {children}

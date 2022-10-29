@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
-import { ContentFrame } from "./page/ContentFrame/ContentFrame";
+import { ContentFrame } from "./page/content-frame/ContentFrame";
 import { MeasurementContext } from "./infrastructure/MeasurementContext";
 import { settingsRepository } from "./domain/settings/SettingsRepository";
 

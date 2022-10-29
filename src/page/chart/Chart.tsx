@@ -18,7 +18,9 @@ import { Grid } from "@mui/material";
 import { Measurement } from "../../domain/roast/Roast";
 import { ReferenceMeasurementContext } from "../../infrastructure/ReferenceMeasurementContext";
 
-const DEFAULT_MEASUREMENT_LENGTH = 60 * 60 * 20 * 10;
+const FIVE_MINUTES = 300000; // 5 minutes in milliseconds
+const DEFAULT_MEASUREMENT_LENGTH = 4 * FIVE_MINUTES; // 20 minutes
+
 export const Chart: FunctionComponent = () => {
   const { roastData, startTime, maxTime } = useContext(MeasurementContext);
   const { referenceTopicName, referenceMeasurements } = useContext(
@@ -34,7 +36,12 @@ export const Chart: FunctionComponent = () => {
   }, []);
 
   const updateMaxDomain = (startTime: number, maxTime: number) => {
-    setMaxDomain(Math.max(DEFAULT_MEASUREMENT_LENGTH, maxTime - startTime));
+    const timeExceeded = maxTime - startTime >= DEFAULT_MEASUREMENT_LENGTH;
+    setMaxDomain(
+      timeExceeded
+        ? DEFAULT_MEASUREMENT_LENGTH + FIVE_MINUTES
+        : DEFAULT_MEASUREMENT_LENGTH
+    );
   };
 
   useEffect(() => {
@@ -91,6 +98,18 @@ export const Chart: FunctionComponent = () => {
   );
 };
 
+function msToMS(ms: number): string {
+  let secondsRemaining = Math.floor(ms / 1000);
+  secondsRemaining = secondsRemaining % 3600;
+  const minutes = ("0" + Math.floor(secondsRemaining / 60)).slice(-2);
+  const seconds = ("0" + (secondsRemaining % 60)).slice(-2);
+  return minutes + ":" + seconds;
+}
+
+const xTickFormatter = (value: number, index: number): string => {
+  return msToMS(value);
+};
+
 const putData = (
   axisIndex: number,
   maxDomain: number,
@@ -108,6 +127,7 @@ const putData = (
         type={"number"}
         hide={!showX}
         tickCount={9}
+        tickFormatter={xTickFormatter}
       />
 
       {measurements && (

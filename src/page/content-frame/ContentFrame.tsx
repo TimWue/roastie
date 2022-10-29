@@ -8,8 +8,8 @@ import { Route, Routes } from "react-router-dom";
 import { Dashboard } from "../dashboard/Dashboard";
 import { SettingsManagement } from "../settings/SettingsManagement";
 import { ArchiveTable } from "../archive/ArchiveTable";
-import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
+import { Sidebar } from "./Sidebar";
 
 export const drawerWidth: number = 240;
 

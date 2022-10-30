@@ -50,7 +50,13 @@ export const Chart: FunctionComponent = () => {
 
   return (
     <>
-      <Grid container direction={"row"} justifyContent={"space-between"}>
+      <Grid
+        container
+        direction={"row"}
+        justifyContent={"space-between"}
+        pr={"20px"}
+        pl={"10px"}
+      >
         <Title>Aktuelle Röstung</Title>
         <Controls />
       </Grid>
@@ -79,7 +85,8 @@ export const Chart: FunctionComponent = () => {
               topic,
               index == 0,
               measurements,
-              startTime
+              startTime,
+              false
             );
           })}
           {referenceMeasurements &&
@@ -90,7 +97,8 @@ export const Chart: FunctionComponent = () => {
               { color: "blue", name: referenceTopicName + "(Ref.)" }, // probably better to use dashed lines
               false,
               referenceMeasurements,
-              referenceMeasurements[0].x
+              referenceMeasurements[0].x,
+              true
             )}
         </LineChart>
       </ResponsiveContainer>
@@ -116,7 +124,8 @@ const putData = (
   topic: Topic,
   showX: boolean,
   measurements: Measurement[] | undefined,
-  startTime: number | undefined
+  startTime: number | undefined,
+  isReference: boolean
 ) => {
   return (
     <>
@@ -143,8 +152,10 @@ const putData = (
           dataKey={"y"}
           xAxisId={axisIndex}
           type="monotone"
-          stroke={topic.color}
+          stroke={isReference ? "#555" : topic.color}
           name={topic.name}
+          dot={false}
+          strokeDasharray={isReference ? 4 : undefined}
         />
       )}
     </>

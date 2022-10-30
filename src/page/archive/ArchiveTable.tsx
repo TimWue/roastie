@@ -25,6 +25,7 @@ export const ArchiveTable: FunctionComponent = () => {
     update: updateReferenceMeasurement,
     referenceTopicName,
     remove: removeReferenceMeasurement,
+    referenceRoastId,
   } = useContext(ReferenceMeasurementContext);
 
   const loadRoasts = () => {
@@ -67,7 +68,11 @@ export const ArchiveTable: FunctionComponent = () => {
                 </TableCell>
                 <TableCell>
                   <SelectTopic
-                    selectedTopic={referenceTopicName}
+                    selectedTopic={
+                      referenceRoastId === roast.id
+                        ? referenceTopicName
+                        : undefined
+                    }
                     setSelectedTopic={(topicName: TopicName | undefined) => {
                       topicName
                         ? updateReferenceMeasurement(roast, topicName)

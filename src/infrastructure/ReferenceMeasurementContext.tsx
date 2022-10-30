@@ -5,6 +5,7 @@ import { TopicName } from "../domain/settings/Settings";
 interface ContextProps {
   referenceTopicName: TopicName | undefined;
   referenceMeasurements: Measurement[] | undefined;
+  referenceRoastId: string | undefined;
   update: (roast: Roast, topicName?: TopicName) => void;
   remove: () => void;
   changeTopicName: (topicName: TopicName) => void;
@@ -56,6 +57,7 @@ export const ReferenceMeasurementContextProvider: FunctionComponent<
   return (
     <ReferenceMeasurementContext.Provider
       value={{
+        referenceRoastId: referenceRoast?.id,
         referenceTopicName,
         referenceMeasurements,
         remove,

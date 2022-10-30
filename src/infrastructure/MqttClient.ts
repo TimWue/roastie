@@ -17,10 +17,10 @@ export class MqttClientConnection {
       console.log("MQTT Granted: " + JSON.stringify(granted));
     });
     this.client.on("message", function (topic, message) {
-      const messageObject = JSON.parse(message.toString()) as { y: string };
+      const messageObject = JSON.parse(message.toString()) as { value: string };
       const measurement: Measurement = {
         x: Date.now(),
-        y: Number(messageObject.y),
+        y: Number(Number(messageObject.value).toFixed(2)),
       };
 
       console.log("Received measurement: " + JSON.stringify(measurement));

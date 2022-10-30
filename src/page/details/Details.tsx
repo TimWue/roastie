@@ -7,7 +7,6 @@ export const Details: FunctionComponent = () => {
   return (
     <Grid container rowSpacing={2} xs={12}>
       <DetailValue title={"Temperatur"} unit={"°C"} />
-      <DetailValue title={"Gradient"} unit={"°C/min"} />
     </Grid>
   );
 };

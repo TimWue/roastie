@@ -45,6 +45,7 @@ export const Save: FunctionComponent = () => {
           label="Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          fullWidth
         />
       </Grid>
       <Grid item>
@@ -54,6 +55,7 @@ export const Save: FunctionComponent = () => {
           label="Bohne"
           value={bean}
           onChange={(e) => setBean(e.target.value)}
+          fullWidth
         />
       </Grid>
 
@@ -65,6 +67,7 @@ export const Save: FunctionComponent = () => {
           maxRows={4}
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          fullWidth
         />
       </Grid>
       <Grid item>

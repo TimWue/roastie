@@ -54,8 +54,7 @@ export const Chart: FunctionComponent = () => {
         container
         direction={"row"}
         justifyContent={"space-between"}
-        pr={"20px"}
-        pl={"10px"}
+        flexWrap={"nowrap"}
       >
         <Title>Aktuelle Röstung</Title>
         <Controls />
@@ -65,7 +64,7 @@ export const Chart: FunctionComponent = () => {
         <LineChart
           width={730}
           height={250}
-          margin={{ top: 20, right: 20, bottom: 10, left: 10 }}
+          margin={{ top: 20, right: 0, bottom: 10, left: 0 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis
@@ -83,7 +82,7 @@ export const Chart: FunctionComponent = () => {
               index,
               maxDomain,
               topic,
-              index == 0,
+              index === 0,
               measurements,
               startTime,
               false
@@ -156,6 +155,7 @@ const putData = (
           name={topic.name}
           dot={false}
           strokeDasharray={isReference ? 4 : undefined}
+          strokeWidth={5}
         />
       )}
     </>

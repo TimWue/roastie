@@ -30,7 +30,7 @@ export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
   }, [lastMeasurement]);
 
   return (
-    <Grid item xs={12}>
+    <Grid item xs={12} width={"250px"}>
       <Paper
         sx={{
           px: 1,
@@ -42,12 +42,14 @@ export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
           overflow: "hidden",
         }}
       >
-        <Title>{title}</Title>
+        <Title>
+          {title} [{unit}]
+        </Title>
         <Typography component="p" variant="h4">
           {value}
         </Typography>
         <Typography color="text.secondary" sx={{ flex: 1 }}>
-          {unit}
+          {selectedTopic}
         </Typography>
       </Paper>
     </Grid>

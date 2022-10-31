@@ -24,7 +24,7 @@ export const TopicItem: FunctionComponent<Props> = ({
       container
       direction={"column"}
       p={"5px"}
-      style={{ borderRadius: "10px", backgroundColor: "rgba(0,0,0,0.025)" }}
+      style={{ borderRadius: "10px", backgroundColor: "rgba(0,0,0,0.075)" }}
     >
       <Grid item p={"5px"}>
         <Input
@@ -58,6 +58,10 @@ export const TopicItem: FunctionComponent<Props> = ({
                       width: 25,
                       height: 25,
                       backgroundColor: topic.color,
+                      borderRadius: "10%",
+                      borderWidth: "2px",
+                      borderColor: "black",
+                      borderStyle: "solid",
                     }}
                   />
                 </Button>

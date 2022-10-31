@@ -49,12 +49,12 @@ export const SettingsManagement: FunctionComponent = ({}) => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Container>
       <Grid container spacing={1} p={"10px"}>
         <Grid item xs={12}>
           <Paper
             style={{
-              padding: "50px",
+              padding: "10px",
               display: "flex",
               flexDirection: "column",
               gap: "20px",
@@ -95,7 +95,7 @@ export const SettingsManagement: FunctionComponent = ({}) => {
         <Grid item xs={12}>
           <Paper
             style={{
-              padding: "50px",
+              padding: "10px",
               display: "flex",
               flexDirection: "column",
               gap: "20px",
@@ -123,7 +123,12 @@ export const SettingsManagement: FunctionComponent = ({}) => {
 
         <Grid item xs={12}>
           <Button
-            style={{ marginLeft: "auto", display: "block" }}
+            style={{
+              marginTop: "20px",
+              marginLeft: "auto",
+              display: "block",
+              marginRight: "auto",
+            }}
             onClick={saveSettings}
           >
             Speichern

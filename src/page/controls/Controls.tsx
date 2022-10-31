@@ -15,8 +15,12 @@ export const Controls: FunctionComponent = () => {
   } = useContext(MeasurementContext);
 
   return (
-    <ButtonGroup variant="contained" size={"small"}>
-      <Button onClick={startMeasurement} disabled={measurementStarted}>
+    <ButtonGroup variant="outlined" size={"small"}>
+      <Button
+        onClick={startMeasurement}
+        disabled={measurementStarted}
+        size={"small"}
+      >
         <Tooltip title={"Starten"}>
           <PlayArrowIcon />
         </Tooltip>

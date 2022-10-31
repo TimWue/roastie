@@ -1,6 +1,6 @@
 import { FunctionComponent, ReactNode, useState } from "react";
 import Box from "@mui/material/Box";
-import { Grid, Tab, Tabs } from "@mui/material";
+import { Tab, Tabs } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Details } from "../details/Details";
 import { Save } from "../saveRoast/Save";
@@ -36,25 +36,23 @@ export const SwitchDetailsSave: FunctionComponent = () => {
   };
 
   return (
-    <Grid item xs={3}>
-      <Box>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-          >
-            <Tab label="Details" />
-            <Tab label="Speichern" />
-          </Tabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <Details />
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Save />
-        </TabPanel>
+    <Box>
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
+          <Tab label="Details" />
+          <Tab label="Speichern" />
+        </Tabs>
       </Box>
-    </Grid>
+      <TabPanel value={value} index={0}>
+        <Details />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Save />
+      </TabPanel>
+    </Box>
   );
 };

@@ -18,9 +18,12 @@ export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
   const { lastMeasurement } = useContext(MeasurementContext);
 
   useEffect(() => {
-    settingsRepository.getSettings().then((settings) => {
-      setSelectedTopic(settings.details.selectedTopic);
-    });
+    settingsRepository
+      .getSettings()
+      .then((settings) => {
+        setSelectedTopic(settings.details.selectedTopic);
+      })
+      .catch(console.warn);
   }, []);
 
   useEffect(() => {

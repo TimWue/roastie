@@ -26,13 +26,16 @@ export const Chart: FunctionComponent = () => {
   const { referenceTopicName, referenceMeasurements } = useContext(
     ReferenceMeasurementContext
   );
-  const [topics, setTopics] = useState<Topic[]>();
+  const [topics, setTopics] = useState<Topic[]>([]);
   const [maxDomain, setMaxDomain] = useState(DEFAULT_MEASUREMENT_LENGTH);
 
   useEffect(() => {
-    settingsRepository.getSettings().then((settings) => {
-      setTopics(settings.mqtt.topics);
-    });
+    settingsRepository
+      .getSettings()
+      .then((settings) => {
+        setTopics(settings.mqtt.topics);
+      })
+      .catch((e) => console.warn(e));
   }, []);
 
   const updateMaxDomain = (startTime: number, maxTime: number) => {
@@ -76,25 +79,23 @@ export const Chart: FunctionComponent = () => {
             hide={false}
           />
           <Legend />
+          <XAxis
+            dataKey="x"
+            xAxisId={0}
+            domain={[0, maxDomain]}
+            type={"number"}
+            tickCount={9}
+            tickFormatter={xTickFormatter}
+          />
           {topics?.map((topic, index) => {
             const measurements = roastData.get(topic.name);
-            return putData(
-              index,
-              maxDomain,
-              topic,
-              index === 0,
-              measurements,
-              startTime,
-              false
-            );
+            return putData(maxDomain, topic, measurements, startTime, false);
           })}
           {referenceMeasurements &&
             referenceTopicName &&
             putData(
-              100,
               maxDomain,
               { color: "blue", name: referenceTopicName + "(Ref.)" }, // probably better to use dashed lines
-              false,
               referenceMeasurements,
               referenceMeasurements[0].x,
               true
@@ -118,26 +119,14 @@ const xTickFormatter = (value: number, index: number): string => {
 };
 
 const putData = (
-  axisIndex: number,
   maxDomain: number,
   topic: Topic,
-  showX: boolean,
   measurements: Measurement[] | undefined,
   startTime: number | undefined,
   isReference: boolean
 ) => {
   return (
     <>
-      <XAxis
-        dataKey="x"
-        xAxisId={axisIndex}
-        domain={[0, maxDomain]}
-        type={"number"}
-        hide={!showX}
-        tickCount={9}
-        tickFormatter={xTickFormatter}
-      />
-
       {measurements && (
         <Line
           isAnimationActive={false}
@@ -149,7 +138,7 @@ const putData = (
             };
           })}
           dataKey={"y"}
-          xAxisId={axisIndex}
+          xAxisId={0}
           type="monotone"
           stroke={isReference ? "#555" : topic.color}
           name={topic.name}

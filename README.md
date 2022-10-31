@@ -15,7 +15,7 @@ Start infrastructure (mqtt broker and service providing sensor data)
 
 ## Access the app
 The application is deployed using *github-pages* and can be reached under:
-https://tbd.de
+https://timwue.github.io/roastie
 
 ## How to start locally?
 

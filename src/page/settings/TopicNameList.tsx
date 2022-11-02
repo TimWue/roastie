@@ -29,14 +29,7 @@ export const TopicNameList: FunctionComponent<Props> = ({
   };
 
   return (
-    <Grid
-      container
-      direction={"row"}
-      flexWrap={"wrap"}
-      pl={"50px"}
-      gap={"10px"}
-      pt={"10px"}
-    >
+    <>
       {topicNames.map((topicName, index) => {
         return (
           <Grid item>
@@ -48,6 +41,6 @@ export const TopicNameList: FunctionComponent<Props> = ({
           </Grid>
         );
       })}
-    </Grid>
+    </>
   );
 };

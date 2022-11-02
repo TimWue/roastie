@@ -45,17 +45,28 @@ export const MqttSettings: FunctionComponent<Props> = ({
         </Grid>
       </Grid>
 
-      <Grid container columnSpacing={"50px"} flexWrap={"wrap"}>
-        <Grid item>
-          <InputLabel htmlFor="outlined-adornment-amount">Topics</InputLabel>
+      <Grid container gap={"10px"}>
+        <InputLabel htmlFor="outlined-adornment-amount">Topics</InputLabel>
+        <Grid
+          container
+          gap={"10px"}
+          flexWrap={"wrap"}
+          display={"flex"}
+          flexDirection={"row"}
+          alignItems={"center"}
+        >
+          <TopicNameList
+            topicNames={topicsNames}
+            setTopicNames={setTopicNames}
+          />
+          <Grid item>
+            <Tooltip title={"Topic hinzufügen"}>
+              <Button onClick={addNewTopic}>
+                <AddCircleIcon />
+              </Button>
+            </Tooltip>
+          </Grid>
         </Grid>
-        <TopicNameList topicNames={topicsNames} setTopicNames={setTopicNames} />
-        <Grid item></Grid>
-        <Tooltip title={"Topic hinzufügen"}>
-          <Button onClick={addNewTopic}>
-            <AddCircleIcon />
-          </Button>
-        </Tooltip>
       </Grid>
     </>
   );

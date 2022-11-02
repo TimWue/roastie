@@ -5,8 +5,8 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { Button, InputLabel, Tooltip } from "@mui/material";
 import { DataInformation, TopicName } from "../../domain/settings/Settings";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import { DataInformationList } from "./DataInformationList";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 interface Props {
   topicNames: TopicName[];
@@ -20,32 +20,49 @@ export const DisplaySettings: FunctionComponent<Props> = ({
   setDataInformation,
 }) => {
   const addNewDataInformation = () => {
+    if (topicNames.length == 0) {
+      throw new Error("Can not create data information without topics.");
+    }
     setDataInformation([
       ...dataInformation,
-      { displayName: "", topicName: "", color: "000000" },
+      {
+        displayName: "",
+        topicName: topicNames[0],
+        color: "#111111",
+        show: false,
+      },
     ]);
   };
+
   return (
     <>
       <Typography component="p" variant="h4">
         Darstellung
       </Typography>
       <Divider />
-
-      <Grid container columnSpacing={"50px"} flexWrap={"wrap"}>
-        <Grid item>
-          <InputLabel htmlFor="outlined-adornment-amount"></InputLabel>
-        </Grid>
+      <Grid item>
+        <InputLabel>Darstellungen</InputLabel>
+      </Grid>
+      <Grid
+        container
+        gap={"10px"}
+        flexWrap={"wrap"}
+        display={"flex"}
+        flexDirection={"row"}
+        alignItems={"center"}
+      >
         <DataInformationList
           dataInformation={dataInformation}
           setDataInformation={setDataInformation}
+          topicNames={topicNames}
         />
-        <Grid item></Grid>
-        <Tooltip title={"Topic hinzufügen"}>
-          <Button onClick={addNewDataInformation}>
-            <AddCircleIcon />
-          </Button>
-        </Tooltip>
+        <Grid item>
+          <Tooltip title={"Darstellung hinzufügen"}>
+            <Button onClick={addNewDataInformation}>
+              <AddCircleIcon />
+            </Button>
+          </Tooltip>
+        </Grid>
       </Grid>
     </>
   );

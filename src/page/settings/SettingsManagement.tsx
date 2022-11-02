@@ -14,7 +14,7 @@ import { MqttSettings } from "./MqttSettings";
 import { DisplaySettings } from "./DisplaySettings";
 
 export const SettingsManagement: FunctionComponent = ({}) => {
-  const [host, setHost] = useState("mqtt://test.mosquitto.org");
+  const [host, setHost] = useState("ws://localhost:8000");
   const [dataInformation, setDataInformation] = useState<DataInformation[]>([]);
   const [topicNames, setTopicNames] = useState<TopicName[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<TopicName>();
@@ -25,17 +25,7 @@ export const SettingsManagement: FunctionComponent = ({}) => {
         setTopicNames(settings.mqtt.topicNames ?? []);
         setHost(settings.mqtt.host);
         setSelectedTopic(settings.details.selectedTopic);
-
-        // todo: this is just for now
-        setDataInformation(
-          settings.mqtt.topicNames.map((topicName) => {
-            return {
-              topicName: topicName,
-              displayName: topicName,
-              color: "#111111",
-            };
-          })
-        );
+        setDataInformation(settings.display.dataInformation);
       }
     });
   }, []);
@@ -45,11 +35,12 @@ export const SettingsManagement: FunctionComponent = ({}) => {
       throw new Error("Please select a topic for details");
     }
 
+    console.log(dataInformation.map((data) => data.show));
     const newSettings: Settings = {
       mqtt: { host, topicNames: topicNames },
       id: 1,
       details: { selectedTopic },
-      display: { dataInformation: [] }, // todo
+      display: { dataInformation: dataInformation },
     };
     await settingsRepository.updateSettings(newSettings);
   };

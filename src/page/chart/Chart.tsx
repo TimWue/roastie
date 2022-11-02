@@ -103,6 +103,7 @@ export const Chart: FunctionComponent = () => {
                 color: "blue",
                 topicName: referenceTopicName,
                 displayName: referenceTopicName + "(Ref.)",
+                show: false,
               }, // probably better to use dashed lines
               referenceMeasurements,
               referenceMeasurements[0].x,

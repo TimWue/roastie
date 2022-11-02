@@ -4,6 +4,7 @@ export type DataInformation = {
   displayName: string;
   topicName: TopicName;
   color: string;
+  show: boolean;
 };
 
 export type DisplaySettings = {

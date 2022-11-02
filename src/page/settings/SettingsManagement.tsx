@@ -1,24 +1,41 @@
 import * as React from "react";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, ReactNode, useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
-import { Settings, Topic } from "../../domain/settings/Settings";
+import {
+  DataInformation,
+  Settings,
+  TopicName,
+} from "../../domain/settings/Settings";
 import { DetailsSettings } from "./DetailsSettings";
 import { MqttSettings } from "./MqttSettings";
+import { DisplaySettings } from "./DisplaySettings";
 
 export const SettingsManagement: FunctionComponent = ({}) => {
   const [host, setHost] = useState("mqtt://test.mosquitto.org");
-  const [topics, setTopics] = useState<Topic[]>([]);
-  const [selectedTopic, setSelectedTopic] = useState<string>();
+  const [dataInformation, setDataInformation] = useState<DataInformation[]>([]);
+  const [topicNames, setTopicNames] = useState<TopicName[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<TopicName>();
 
   useEffect(() => {
     settingsRepository.getSettings().then((settings) => {
       if (settings) {
-        setTopics(settings.mqtt.topics);
+        setTopicNames(settings.mqtt.topicNames ?? []);
         setHost(settings.mqtt.host);
         setSelectedTopic(settings.details.selectedTopic);
+
+        // todo: this is just for now
+        setDataInformation(
+          settings.mqtt.topicNames.map((topicName) => {
+            return {
+              topicName: topicName,
+              displayName: topicName,
+              color: "#111111",
+            };
+          })
+        );
       }
     });
   }, []);
@@ -29,51 +46,40 @@ export const SettingsManagement: FunctionComponent = ({}) => {
     }
 
     const newSettings: Settings = {
-      mqtt: { host, topics },
+      mqtt: { host, topicNames: topicNames },
       id: 1,
       details: { selectedTopic },
+      display: { dataInformation: [] }, // todo
     };
     await settingsRepository.updateSettings(newSettings);
   };
 
   return (
     <Grid container spacing={1} p={"10px"}>
-      <Grid item xs={12}>
-        <Paper
-          style={{
-            padding: "10px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-          }}
-          variant={"outlined"}
-        >
-          <MqttSettings
-            host={host}
-            setHost={setHost}
-            topics={topics}
-            setTopics={setTopics}
-          />
-        </Paper>
-      </Grid>
+      <SettingsFrame>
+        <MqttSettings
+          host={host}
+          setHost={setHost}
+          topicsNames={topicNames}
+          setTopicNames={setTopicNames}
+        />
+      </SettingsFrame>
 
-      <Grid item xs={12}>
-        <Paper
-          style={{
-            padding: "10px",
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-          }}
-          variant={"outlined"}
-        >
-          <DetailsSettings
-            selectedTopic={selectedTopic}
-            setSelectedTopic={setSelectedTopic}
-            topics={topics}
-          />
-        </Paper>
-      </Grid>
+      <SettingsFrame>
+        <DisplaySettings
+          topicNames={topicNames}
+          dataInformation={dataInformation}
+          setDataInformation={setDataInformation}
+        />
+      </SettingsFrame>
+
+      <SettingsFrame>
+        <DetailsSettings
+          selectedTopic={selectedTopic}
+          setSelectedTopic={setSelectedTopic}
+          topicNames={topicNames}
+        />
+      </SettingsFrame>
 
       <Grid item xs={12}>
         <Button
@@ -88,6 +94,27 @@ export const SettingsManagement: FunctionComponent = ({}) => {
           Speichern
         </Button>
       </Grid>
+    </Grid>
+  );
+};
+
+const SettingsFrame: FunctionComponent<{ children: ReactNode }> = ({
+  children,
+}) => {
+  return (
+    <Grid item xs={12}>
+      <Paper
+        style={{
+          padding: "10px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "20px",
+        }}
+        variant={"outlined"}
+      >
+        {" "}
+        {children}
+      </Paper>
     </Grid>
   );
 };

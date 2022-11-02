@@ -1,13 +1,18 @@
 export type TopicName = string;
 
-export type Topic = {
-  name: TopicName;
+export type DataInformation = {
+  displayName: string;
+  topicName: TopicName;
   color: string;
+};
+
+export type DisplaySettings = {
+  dataInformation: DataInformation[];
 };
 
 export type MqttSettings = {
   host: string;
-  topics: Topic[];
+  topicNames: TopicName[];
 };
 
 export type DetailSettings = {
@@ -18,4 +23,5 @@ export type Settings = {
   id: number;
   mqtt: MqttSettings;
   details: DetailSettings;
+  display: DisplaySettings;
 };

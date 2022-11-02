@@ -1,7 +1,6 @@
 import * as React from "react";
 import { FunctionComponent, useEffect, useState } from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { Topic } from "../../domain/settings/Settings";
 
 const DEFAULT = "---";
 interface Props {

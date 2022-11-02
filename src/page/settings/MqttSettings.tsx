@@ -4,30 +4,30 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { Button, Input, InputLabel, Tooltip } from "@mui/material";
-import { Topic } from "../../domain/settings/Settings";
-import { TopicList } from "./TopicList";
+import { TopicName } from "../../domain/settings/Settings";
+import { TopicNameList } from "./TopicNameList";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 interface Props {
   host: string;
   setHost: (host: string) => void;
 
-  topics: Topic[];
-  setTopics: (topics: Topic[]) => void;
+  topicsNames: TopicName[];
+  setTopicNames: (topics: TopicName[]) => void;
 }
 
 export const MqttSettings: FunctionComponent<Props> = ({
   host,
   setHost,
-  topics,
-  setTopics,
+  topicsNames,
+  setTopicNames,
 }) => {
   const handleHostChange = (event: ChangeEvent<any>) => {
     setHost(event.currentTarget.value);
   };
 
   const addNewTopic = () => {
-    setTopics([...topics, { name: "", color: "#000000" }]);
+    setTopicNames([...topicsNames, ""]);
   };
 
   return (
@@ -49,7 +49,7 @@ export const MqttSettings: FunctionComponent<Props> = ({
         <Grid item>
           <InputLabel htmlFor="outlined-adornment-amount">Topics</InputLabel>
         </Grid>
-        <TopicList topics={topics} setTopics={setTopics} />
+        <TopicNameList topicNames={topicsNames} setTopicNames={setTopicNames} />
         <Grid item></Grid>
         <Tooltip title={"Topic hinzufügen"}>
           <Button onClick={addNewTopic}>

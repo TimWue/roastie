@@ -5,18 +5,18 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { InputLabel } from "@mui/material";
 import { SelectTopic } from "../shared/SelectTopic";
-import { Topic } from "../../domain/settings/Settings";
+import { TopicName } from "../../domain/settings/Settings";
 
 interface Props {
   selectedTopic: string | undefined;
   setSelectedTopic: (selectedTopic: string | undefined) => void;
-  topics: Topic[];
+  topicNames: TopicName[];
 }
 
 export const DetailsSettings: FunctionComponent<Props> = ({
   selectedTopic,
   setSelectedTopic,
-  topics,
+  topicNames,
 }) => {
   return (
     <>
@@ -33,7 +33,7 @@ export const DetailsSettings: FunctionComponent<Props> = ({
           <SelectTopic
             selectedTopic={selectedTopic}
             setSelectedTopic={setSelectedTopic}
-            topicNames={topics.map((topic) => topic.name)}
+            topicNames={topicNames}
           />
         </Grid>
       </Grid>

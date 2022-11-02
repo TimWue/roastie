@@ -10,7 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import { MeasurementContext } from "../../infrastructure/MeasurementContext";
-import { Topic } from "../../domain/settings/Settings";
+import { DataInformation } from "../../domain/settings/Settings";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
 import { Controls } from "../controls/Controls";
 import { Grid } from "@mui/material";
@@ -28,14 +28,14 @@ export const Chart: FunctionComponent = () => {
   const { referenceTopicName, referenceMeasurements } = useContext(
     ReferenceMeasurementContext
   );
-  const [topics, setTopics] = useState<Topic[]>([]);
+  const [dataInformation, setDataInformation] = useState<DataInformation[]>([]);
   const [maxDomain, setMaxDomain] = useState(DEFAULT_MEASUREMENT_LENGTH);
 
   useEffect(() => {
     settingsRepository
       .getSettings()
       .then((settings) => {
-        setTopics(settings.mqtt.topics);
+        setDataInformation(settings.display.dataInformation);
       })
       .catch((e) => console.warn(e));
   }, []);
@@ -85,15 +85,25 @@ export const Chart: FunctionComponent = () => {
             tickCount={9}
             tickFormatter={xTickFormatter}
           />
-          {topics?.map((topic, index) => {
-            const measurements = roastData.get(topic.name);
-            return putData(maxDomain, topic, measurements, startTime, false);
+          {dataInformation?.map((dataInformation, index) => {
+            const measurements = roastData.get(dataInformation.displayName);
+            return createLine(
+              maxDomain,
+              dataInformation,
+              measurements,
+              startTime,
+              false
+            );
           })}
           {referenceMeasurements &&
             referenceTopicName &&
-            putData(
+            createLine(
               maxDomain,
-              { color: "blue", name: referenceTopicName + "(Ref.)" }, // probably better to use dashed lines
+              {
+                color: "blue",
+                topicName: referenceTopicName,
+                displayName: referenceTopicName + "(Ref.)",
+              }, // probably better to use dashed lines
               referenceMeasurements,
               referenceMeasurements[0].x,
               true
@@ -108,9 +118,9 @@ const xTickFormatter = (value: number, index: number): string => {
   return msToMS(value);
 };
 
-const putData = (
+const createLine = (
   maxDomain: number,
-  topic: Topic,
+  dataInformation: DataInformation,
   measurements: Measurement[] | undefined,
   startTime: number | undefined,
   isReference: boolean
@@ -130,8 +140,8 @@ const putData = (
           dataKey={"y"}
           xAxisId={0}
           type="monotone"
-          stroke={isReference ? "#555" : topic.color}
-          name={topic.name}
+          stroke={isReference ? "#555" : dataInformation.color}
+          name={dataInformation.displayName}
           dot={false}
           strokeDasharray={isReference ? 4 : undefined}
           strokeWidth={5}

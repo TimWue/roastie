@@ -41,7 +41,7 @@ export const ContentFrame: FunctionComponent = () => {
 
   useEffect(() => {
     settingsRepository.getSettings().then((settings) => {
-      const topicNames = settings.mqtt.topics.map((topic) => topic.name);
+      const topicNames = settings.mqtt.topicNames;
       const host = settings.mqtt.host;
       try {
         subscribeToMeasurements(host, topicNames);

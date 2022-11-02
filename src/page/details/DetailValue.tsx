@@ -44,6 +44,7 @@ export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
           height: 110,
           overflow: "hidden",
         }}
+        variant={"outlined"}
       >
         <Title>
           {title} [{unit}]

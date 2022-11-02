@@ -9,6 +9,12 @@ import { Measurement, RoastData } from "../domain/roast/Roast";
 import { MqttClientConnection } from "./MqttClient";
 import { TopicName } from "../domain/settings/Settings";
 
+export enum Status {
+  RUNNING = "RUNNING",
+  PAUSED = "PAUSED",
+  IDLE = "IDLE",
+}
+
 interface TopicMeasurement {
   topicName: TopicName;
   measurement: Measurement;
@@ -22,7 +28,7 @@ interface ContextProps {
   resetMeasurement: () => void;
   subscribeToMeasurements: (host: string, topicNames: string[]) => void;
   unsubscribeFromMeasurements: () => void;
-  measurementStarted: boolean;
+  measurementStatus: Status;
   startTime: number | undefined;
   maxTime: number | undefined;
 }
@@ -41,7 +47,7 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   const [topicNames, setTopicNames] = useState<string[]>([]);
   const [lastMeasurement, setLastMeasurement] = useState<TopicMeasurement>();
   const [roastData, setRoastData] = useState<RoastData>(new Map());
-  const [measurementStarted, setMeasurementStarted] = useState(false);
+  const [measurementStatus, setMeasurementStatus] = useState(Status.IDLE);
   const [client, setClient] = useState<MqttClientConnection>();
   const [startTime, setStartTime] = useState<number>();
   const [maxTime, setMaxTime] = useState<number>();
@@ -68,11 +74,12 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   };
 
   const startMeasurement = () => {
-    setMeasurementStarted(true);
+    resetState();
+    setMeasurementStatus(Status.RUNNING);
   };
 
   const stopMeasurement = () => {
-    setMeasurementStarted(false);
+    setMeasurementStatus(Status.PAUSED);
   };
 
   const subscribeToMeasurements = (host: string, topicNames: string[]) => {
@@ -89,15 +96,19 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   };
 
   const resetMeasurement = () => {
+    resetState();
+    setMeasurementStatus(Status.IDLE);
+  };
+
+  const resetState = () => {
     setStartTime(undefined);
     setMaxTime(undefined);
     setLastMeasurement(undefined);
     setRoastData(new Map());
-    setMeasurementStarted(false);
   };
 
   useEffect(() => {
-    if (lastMeasurement && measurementStarted) {
+    if (lastMeasurement && measurementStatus == Status.RUNNING) {
       handleMeasurements(
         lastMeasurement.topicName,
         lastMeasurement.measurement
@@ -115,7 +126,7 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
         subscribeToMeasurements,
         unsubscribeFromMeasurements,
         lastMeasurement,
-        measurementStarted,
+        measurementStatus,
         startTime,
         maxTime,
       }}

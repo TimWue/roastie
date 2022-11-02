@@ -29,7 +29,7 @@ const mdTheme = createTheme({
 
 export const ContentFrame: FunctionComponent = () => {
   const [open, setOpen] = React.useState(false);
-  const [subscriptionError, setSubscriptionError] = useState(true);
+  const [subscriptionError, setSubscriptionError] = useState(false);
   const navigate = useNavigate();
 
   const toggleDrawer = () => {

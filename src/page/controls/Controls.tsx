@@ -1,6 +1,9 @@
 import * as React from "react";
 import { FunctionComponent, useContext } from "react";
-import { MeasurementContext } from "../../infrastructure/MeasurementContext";
+import {
+  MeasurementContext,
+  Status,
+} from "../../infrastructure/MeasurementContext";
 import { Button, ButtonGroup, Tooltip } from "@mui/material";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import PauseIcon from "@mui/icons-material/Pause";
@@ -11,26 +14,32 @@ export const Controls: FunctionComponent = () => {
     startMeasurement,
     stopMeasurement,
     resetMeasurement,
-    measurementStarted,
+    measurementStatus,
   } = useContext(MeasurementContext);
 
   return (
     <ButtonGroup variant="outlined" size={"small"}>
       <Button
         onClick={startMeasurement}
-        disabled={measurementStarted}
+        disabled={measurementStatus == Status.RUNNING}
         size={"small"}
       >
         <Tooltip title={"Starten"}>
           <PlayArrowIcon />
         </Tooltip>
       </Button>
-      <Button onClick={stopMeasurement} disabled={!measurementStarted}>
+      <Button
+        onClick={stopMeasurement}
+        disabled={measurementStatus != Status.RUNNING}
+      >
         <Tooltip title={"Pausieren"}>
           <PauseIcon />
         </Tooltip>
       </Button>
-      <Button onClick={resetMeasurement} disabled={measurementStarted}>
+      <Button
+        onClick={resetMeasurement}
+        disabled={measurementStatus == Status.RUNNING}
+      >
         <Tooltip title={"Reset"}>
           <RestartAltIcon />
         </Tooltip>

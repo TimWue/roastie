@@ -9,7 +9,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import Title from "../shared/Title";
 import { MeasurementContext } from "../../infrastructure/MeasurementContext";
 import { Topic } from "../../domain/settings/Settings";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
@@ -17,12 +16,15 @@ import { Controls } from "../controls/Controls";
 import { Grid } from "@mui/material";
 import { Measurement } from "../../domain/roast/Roast";
 import { ReferenceMeasurementContext } from "../../infrastructure/ReferenceMeasurementContext";
+import { msToMS } from "../shared/Utils";
+import { DurationValue } from "../details/DurationValue";
 
 const FIVE_MINUTES = 300000; // 5 minutes in milliseconds
 const DEFAULT_MEASUREMENT_LENGTH = 4 * FIVE_MINUTES; // 20 minutes
 
 export const Chart: FunctionComponent = () => {
-  const { roastData, startTime, maxTime } = useContext(MeasurementContext);
+  const { roastData, startTime, maxTime, measurementStatus } =
+    useContext(MeasurementContext);
   const { referenceTopicName, referenceMeasurements } = useContext(
     ReferenceMeasurementContext
   );
@@ -59,16 +61,12 @@ export const Chart: FunctionComponent = () => {
         justifyContent={"space-between"}
         flexWrap={"nowrap"}
       >
-        <Title>Aktuelle Röstung</Title>
+        <DurationValue status={measurementStatus} />
         <Controls />
       </Grid>
 
       <ResponsiveContainer>
-        <LineChart
-          width={730}
-          height={250}
-          margin={{ top: 20, right: 0, bottom: 10, left: 0 }}
-        >
+        <LineChart margin={{ top: 20, right: 0, bottom: 10, left: 0 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis
             dataKey="y"
@@ -105,14 +103,6 @@ export const Chart: FunctionComponent = () => {
     </>
   );
 };
-
-function msToMS(ms: number): string {
-  let secondsRemaining = Math.floor(ms / 1000);
-  secondsRemaining = secondsRemaining % 3600;
-  const minutes = ("0" + Math.floor(secondsRemaining / 60)).slice(-2);
-  const seconds = ("0" + (secondsRemaining % 60)).slice(-2);
-  return minutes + ":" + seconds;
-}
 
 const xTickFormatter = (value: number, index: number): string => {
   return msToMS(value);

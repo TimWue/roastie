@@ -85,8 +85,8 @@ export const Chart: FunctionComponent = () => {
             tickCount={9}
             tickFormatter={xTickFormatter}
           />
-          {dataInformation?.map((dataInformation, index) => {
-            const measurements = roastData.get(dataInformation.displayName);
+          {dataInformation?.map((dataInformation) => {
+            const measurements = roastData.get(dataInformation.topicName);
             return createLine(
               maxDomain,
               dataInformation,

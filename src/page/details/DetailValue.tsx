@@ -1,37 +1,23 @@
 import * as React from "react";
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import { FunctionComponent } from "react";
 import Typography from "@mui/material/Typography";
 import Title from "../shared/Title";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import { settingsRepository } from "../../domain/settings/SettingsRepository";
-import { MeasurementContext } from "../../infrastructure/MeasurementContext";
 
 interface Props {
+  value: number;
   title: string;
   unit: string;
+  displayName: string;
 }
 
-export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
-  const [selectedTopic, setSelectedTopic] = useState<string>();
-  const [value, setValue] = useState<number>();
-  const { lastMeasurement } = useContext(MeasurementContext);
-
-  useEffect(() => {
-    settingsRepository
-      .getSettings()
-      .then((settings) => {
-        setSelectedTopic(settings.details.selectedTopic);
-      })
-      .catch(console.warn);
-  }, []);
-
-  useEffect(() => {
-    if (lastMeasurement && lastMeasurement.topicName === selectedTopic) {
-      setValue(lastMeasurement.measurement.y);
-    }
-  }, [lastMeasurement]);
-
+export const DetailValue: FunctionComponent<Props> = ({
+  title,
+  unit,
+  value,
+  displayName,
+}) => {
   return (
     <Grid item xs={12} width={"250px"}>
       <Paper
@@ -53,7 +39,7 @@ export const DetailValue: FunctionComponent<Props> = ({ title, unit }) => {
           {value}
         </Typography>
         <Typography color="text.secondary" sx={{ flex: 1 }}>
-          {selectedTopic}
+          {displayName}
         </Typography>
       </Paper>
     </Grid>

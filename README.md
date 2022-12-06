@@ -1,6 +1,6 @@
 # What is Roastie?
 
-*Roastie* is a small browser based application to monitor data collecting while roasting coffee.
+*Roastie* is a small browser based application to monitor data collected while roasting coffee.
 
 ## Prerequisites
 

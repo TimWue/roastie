@@ -5,6 +5,7 @@ import { Button, Rating, TextField, Typography } from "@mui/material";
 import { Roast } from "../../domain/roast/Roast";
 import { roastRepository } from "../../domain/roast/RoastRepository";
 import { MeasurementContext } from "../../infrastructure/MeasurementContext";
+import Title from "../shared/Title";
 
 export const Save: FunctionComponent = () => {
   const { roastData } = useContext(MeasurementContext);
@@ -12,6 +13,8 @@ export const Save: FunctionComponent = () => {
   const [name, setName] = useState("");
   const [bean, setBean] = useState("");
   const [rating, setRating] = useState(0);
+  const [startWeight, setStartWeight] = useState<number>();
+  const [endWeight, setEndWeight] = useState<number>();
 
   const save = () => {
     if (!(bean.length > 0 && name.length > 0)) {
@@ -20,12 +23,14 @@ export const Save: FunctionComponent = () => {
     }
 
     const roast: Roast = {
-      bean: bean,
-      comment: comment,
+      bean,
+      comment,
       createdAt: Date.now(),
       data: roastData,
-      name: name,
-      rating: rating,
+      name,
+      rating,
+      startWeight,
+      endWeight,
     };
 
     roastRepository.addRoast(roast).then(() => {
@@ -33,11 +38,17 @@ export const Save: FunctionComponent = () => {
       setName("");
       setRating(0);
       setComment("");
+      setEndWeight(undefined);
+      setStartWeight(undefined);
     });
   };
 
   return (
     <Grid container rowSpacing={2} xs={12} direction={"column"}>
+      <Grid item>
+        <Title>Details</Title>
+      </Grid>
+
       <Grid item>
         <TextField
           required
@@ -57,6 +68,33 @@ export const Save: FunctionComponent = () => {
           onChange={(e) => setBean(e.target.value)}
           fullWidth
         />
+      </Grid>
+      <Grid item>
+        <Grid
+          container
+          direction={"row"}
+          justifyContent={"space-between"}
+          width={"100%"}
+        >
+          <Grid item xs={6} pr={"2px"}>
+            <TextField
+              id="startWeight"
+              label="Gewicht (Start)"
+              value={startWeight}
+              onChange={(e) => setStartWeight(Number(e.target.value))}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={6} pl={"2px"}>
+            <TextField
+              id="endWeight"
+              label="Gewicht (Ende)"
+              value={endWeight}
+              onChange={(e) => setEndWeight(Number(e.target.value))}
+              fullWidth
+            />
+          </Grid>
+        </Grid>
       </Grid>
 
       <Grid item>

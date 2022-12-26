@@ -12,19 +12,15 @@ import {
 import { MeasurementContext } from "../../infrastructure/MeasurementContext";
 import { DataInformation } from "../../domain/settings/Settings";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
-import { Controls } from "../controls/Controls";
-import { Grid } from "@mui/material";
 import { Measurement } from "../../domain/roast/Roast";
 import { ReferenceMeasurementContext } from "../../infrastructure/ReferenceMeasurementContext";
 import { msToMS } from "../shared/Utils";
-import { DurationValue } from "../details/DurationValue";
 
 const FIVE_MINUTES = 300000; // 5 minutes in milliseconds
 const DEFAULT_MEASUREMENT_LENGTH = 4 * FIVE_MINUTES; // 20 minutes
 
 export const Chart: FunctionComponent = () => {
-  const { roastData, startTime, maxTime, measurementStatus } =
-    useContext(MeasurementContext);
+  const { roastData, startTime, maxTime } = useContext(MeasurementContext);
   const { referenceTopicName, referenceMeasurements } = useContext(
     ReferenceMeasurementContext
   );
@@ -55,18 +51,8 @@ export const Chart: FunctionComponent = () => {
 
   return (
     <>
-      <Grid
-        container
-        direction={"row"}
-        justifyContent={"space-between"}
-        flexWrap={"nowrap"}
-      >
-        <DurationValue status={measurementStatus} />
-        <Controls />
-      </Grid>
-
       <ResponsiveContainer>
-        <LineChart margin={{ top: 20, right: 0, bottom: 10, left: 0 }}>
+        <LineChart>
           <CartesianGrid strokeDasharray="3 3" />
           <YAxis
             dataKey="y"

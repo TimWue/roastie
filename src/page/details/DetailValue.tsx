@@ -27,7 +27,6 @@ export const DetailValue: FunctionComponent<Props> = ({
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          height: 110,
           overflow: "hidden",
         }}
         variant={"outlined"}

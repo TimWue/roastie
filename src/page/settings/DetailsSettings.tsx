@@ -1,11 +1,11 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { InputLabel } from "@mui/material";
 import { SelectTopic } from "../shared/SelectTopic";
 import { TopicName } from "../../domain/settings/Settings";
+import Title from "../shared/Title";
 
 interface Props {
   selectedTopic: string | undefined;
@@ -20,9 +20,7 @@ export const DetailsSettings: FunctionComponent<Props> = ({
 }) => {
   return (
     <>
-      <Typography component="p" variant="h4">
-        Details
-      </Typography>
+      <Title>Details</Title>
       <Divider />
       <Grid container columnSpacing={"50px"} alignItems={"center"}>
         <Grid item>

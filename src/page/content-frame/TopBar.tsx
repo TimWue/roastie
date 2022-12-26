@@ -41,6 +41,7 @@ export const TopBar: FunctionComponent<Props> = ({ open, toggleDrawer }) => {
     <AppBar position="absolute" open={open}>
       <Toolbar
         sx={{
+          height: `${toolbarHeight}px`,
           pr: "24px", // keep right padding when drawer closed
         }}
       >
@@ -69,3 +70,5 @@ export const TopBar: FunctionComponent<Props> = ({ open, toggleDrawer }) => {
     </AppBar>
   );
 };
+
+export const toolbarHeight = 64; //px

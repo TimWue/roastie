@@ -18,7 +18,11 @@ export const Controls: FunctionComponent = () => {
   } = useContext(MeasurementContext);
 
   return (
-    <ButtonGroup variant="outlined" size={"small"}>
+    <ButtonGroup
+      variant="outlined"
+      size={"small"}
+      sx={{ backgroundColor: "white" }}
+    >
       <Button
         onClick={startMeasurement}
         disabled={measurementStatus == Status.RUNNING}

@@ -16,6 +16,9 @@ export type RoastDto = {
   comment?: string;
   bean: string;
   createdAt: number;
+  startWeight?: number;
+  endWeight?: number;
+  firstCrack?: number;
 };
 
 export class RoastDexie extends Dexie {

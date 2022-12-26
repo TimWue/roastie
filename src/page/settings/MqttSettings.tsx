@@ -1,12 +1,12 @@
 import * as React from "react";
 import { ChangeEvent, FunctionComponent } from "react";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { Button, Input, InputLabel, Tooltip } from "@mui/material";
 import { TopicName } from "../../domain/settings/Settings";
 import { TopicNameList } from "./TopicNameList";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Title from "../shared/Title";
 
 interface Props {
   host: string;
@@ -32,9 +32,7 @@ export const MqttSettings: FunctionComponent<Props> = ({
 
   return (
     <>
-      <Typography component="p" variant="h4">
-        MQTT
-      </Typography>
+      <Title>MQTT</Title>
       <Divider />
       <Grid container columnSpacing={"50px"} alignItems={"center"}>
         <Grid item>

@@ -1,12 +1,12 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
-import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { Button, InputLabel, Tooltip } from "@mui/material";
 import { DataInformation, TopicName } from "../../domain/settings/Settings";
 import { DataInformationList } from "./DataInformationList";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Title from "../shared/Title";
 
 interface Props {
   topicNames: TopicName[];
@@ -36,9 +36,7 @@ export const DisplaySettings: FunctionComponent<Props> = ({
 
   return (
     <>
-      <Typography component="p" variant="h4">
-        Darstellung
-      </Typography>
+      <Title>Darstellung</Title>
       <Divider />
       <Grid item>
         <InputLabel>Darstellungen</InputLabel>

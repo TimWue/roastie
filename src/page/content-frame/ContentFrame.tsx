@@ -8,11 +8,12 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { Dashboard } from "../dashboard/Dashboard";
 import { SettingsManagement } from "../settings/SettingsManagement";
 import { ArchiveTable } from "../archive/ArchiveTable";
-import { TopBar } from "./TopBar";
+import { toolbarHeight, TopBar } from "./TopBar";
 import { Sidebar } from "./Sidebar";
 import { Alert, Button } from "@mui/material";
 import { MeasurementContext } from "../../infrastructure/MeasurementContext";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
+import Grid from "@mui/material/Grid";
 
 export const drawerWidth: number = 240;
 
@@ -31,6 +32,7 @@ export const ContentFrame: FunctionComponent = () => {
   const [open, setOpen] = React.useState(false);
   const [subscriptionError, setSubscriptionError] = useState(false);
   const navigate = useNavigate();
+  const heightContent = window.innerHeight - toolbarHeight;
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -60,14 +62,7 @@ export const ContentFrame: FunctionComponent = () => {
         <CssBaseline />
         <TopBar open={open} toggleDrawer={toggleDrawer} />
         <Sidebar open={open} toggleDrawer={toggleDrawer} />
-        <Box
-          component="main"
-          sx={{
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
-          }}
-        >
+        <Box component="main">
           <Toolbar />
           {subscriptionError && (
             <Alert
@@ -88,11 +83,18 @@ export const ContentFrame: FunctionComponent = () => {
               Die Verbindung zum MQTT-Broker ist fehlgeschlagen.
             </Alert>
           )}
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/archive" element={<ArchiveTable />} />
-            <Route path="/settings" element={<SettingsManagement />} />
-          </Routes>
+          <Grid
+            container
+            width={"100%"}
+            height={`${heightContent}px`}
+            overflow={"auto"}
+          >
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/archive" element={<ArchiveTable />} />
+              <Route path="/settings" element={<SettingsManagement />} />
+            </Routes>
+          </Grid>
         </Box>
       </Box>
     </ThemeProvider>

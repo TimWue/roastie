@@ -39,9 +39,9 @@ export const ArchiveTable: FunctionComponent = () => {
   useEffect(loadRoasts, []);
 
   return (
-    <>
+    <Grid item flexGrow={1} p={"10px"} width={"100%"}>
       <Title>Röstungen</Title>
-      <Table size="small">
+      <Table>
         <TableHead>
           <TableRow>
             <TableCell>Nr.</TableCell>
@@ -107,6 +107,6 @@ export const ArchiveTable: FunctionComponent = () => {
       {showExport && (
         <Export isOpen={showExport} close={() => setShowExport(false)} />
       )}
-    </>
+    </Grid>
   );
 };

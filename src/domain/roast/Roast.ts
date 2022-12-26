@@ -6,6 +6,9 @@ export type Roast = {
   comment?: string;
   bean: string;
   createdAt: number;
+  startWeight?: number;
+  endWeight?: number;
+  firstCrack?: number;
 };
 
 export type Measurement = {

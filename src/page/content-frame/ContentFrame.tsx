@@ -87,7 +87,11 @@ export const ContentFrame: FunctionComponent = () => {
             <Grid item width={`${drawerWidth}px`}>
               <Sidebar />
             </Grid>
-            <Grid item sx={{ width: `calc(100%-${drawerWidth}px)` }} p={"10px"}>
+            <Grid
+              item
+              sx={{ width: `calc(100% - ${drawerWidth}px)` }}
+              p={"10px"}
+            >
               <Routes>
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/archive" element={<ArchiveTable />} />

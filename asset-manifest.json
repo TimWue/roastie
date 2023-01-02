@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/Roastie_V2/static/css/main.e6c13ad2.css",
-    "main.js": "/Roastie_V2/static/js/main.cc718c03.js",
+    "main.js": "/Roastie_V2/static/js/main.1b26c205.js",
     "static/js/787.5b29c8f8.chunk.js": "/Roastie_V2/static/js/787.5b29c8f8.chunk.js",
     "index.html": "/Roastie_V2/index.html",
     "main.e6c13ad2.css.map": "/Roastie_V2/static/css/main.e6c13ad2.css.map",
-    "main.cc718c03.js.map": "/Roastie_V2/static/js/main.cc718c03.js.map",
+    "main.1b26c205.js.map": "/Roastie_V2/static/js/main.1b26c205.js.map",
     "787.5b29c8f8.chunk.js.map": "/Roastie_V2/static/js/787.5b29c8f8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.cc718c03.js"
+    "static/js/main.1b26c205.js"
   ]
 }

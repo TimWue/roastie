@@ -1,19 +1,16 @@
 import * as React from "react";
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { Dashboard } from "../dashboard/Dashboard";
 import { SettingsManagement } from "../settings/SettingsManagement";
 import { ArchiveTable } from "../archive/ArchiveTable";
-import { toolbarHeight, TopBar } from "./TopBar";
-import { Sidebar } from "./Sidebar";
-import { Alert, Button } from "@mui/material";
 import { MeasurementContext } from "../../infrastructure/MeasurementContext";
 import { settingsRepository } from "../../domain/settings/SettingsRepository";
 import Grid from "@mui/material/Grid";
+import { AlertBar } from "./AlertBar";
+import { TopBar } from "./TopBar";
+import { Sidebar } from "./Sidebar";
 
 export const drawerWidth: number = 240;
 
@@ -29,14 +26,11 @@ const mdTheme = createTheme({
 });
 
 export const ContentFrame: FunctionComponent = () => {
-  const [open, setOpen] = React.useState(false);
   const [subscriptionError, setSubscriptionError] = useState(false);
-  const navigate = useNavigate();
-  const heightContent = window.innerHeight - toolbarHeight;
-
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+  const totalHeight = window.innerHeight;
+  const appBarHeight = 64;
+  const contentHeight = totalHeight - appBarHeight;
+  const drawerWidth = 70;
 
   const { subscribeToMeasurements, unsubscribeFromMeasurements } =
     useContext(MeasurementContext);
@@ -58,45 +52,51 @@ export const ContentFrame: FunctionComponent = () => {
 
   return (
     <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex" }}>
-        <CssBaseline />
-        <TopBar open={open} toggleDrawer={toggleDrawer} />
-        <Sidebar open={open} toggleDrawer={toggleDrawer} />
-        <Box component="main">
-          <Toolbar />
-          {subscriptionError && (
-            <Alert
-              severity="info"
-              action={
-                <Button
-                  color="inherit"
-                  size="small"
-                  onClick={() => {
-                    navigate("/settings");
-                    setSubscriptionError(false);
-                  }}
-                >
-                  Zu den Einstellungen
-                </Button>
-              }
-            >
-              Die Verbindung zum MQTT-Broker ist fehlgeschlagen.
-            </Alert>
-          )}
+      <Grid
+        container
+        height={`${totalHeight}px`}
+        direction={"column"}
+        flexWrap={"nowrap"}
+      >
+        <Grid
+          item
+          xs={12}
+          md={12}
+          height={`${appBarHeight}px`}
+          maxHeight={`${appBarHeight}px`}
+        >
+          <TopBar />
+        </Grid>
+        {subscriptionError && (
+          <AlertBar clearError={() => setSubscriptionError(false)} />
+        )}
+        <Grid
+          item
+          xs={12}
+          height={`${contentHeight}px`}
+          direction={"row"}
+          flexWrap={"nowrap"}
+        >
           <Grid
             container
             width={"100%"}
-            height={`${heightContent}px`}
-            overflow={"auto"}
+            flexWrap={"nowrap"}
+            height={"100%"}
+            flexDirection={"row"}
           >
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/archive" element={<ArchiveTable />} />
-              <Route path="/settings" element={<SettingsManagement />} />
-            </Routes>
+            <Grid item width={`${drawerWidth}px`}>
+              <Sidebar />
+            </Grid>
+            <Grid item sx={{ width: `calc(100%-${drawerWidth}px)` }} p={"10px"}>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/archive" element={<ArchiveTable />} />
+                <Route path="/settings" element={<SettingsManagement />} />
+              </Routes>
+            </Grid>
           </Grid>
-        </Box>
-      </Box>
+        </Grid>
+      </Grid>
     </ThemeProvider>
   );
 };

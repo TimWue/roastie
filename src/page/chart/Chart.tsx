@@ -50,54 +50,52 @@ export const Chart: FunctionComponent = () => {
   }, [startTime, maxTime]);
 
   return (
-    <>
-      <ResponsiveContainer>
-        <LineChart>
-          <CartesianGrid strokeDasharray="3 3" />
-          <YAxis
-            dataKey="y"
-            name="temperature"
-            unit="°C"
-            tickCount={5}
-            domain={[0, 200]}
-            hide={false}
-          />
-          <Legend />
-          <XAxis
-            dataKey="x"
-            xAxisId={0}
-            domain={[0, maxDomain]}
-            type={"number"}
-            tickCount={9}
-            tickFormatter={xTickFormatter}
-          />
-          {dataInformation?.map((dataInformation) => {
-            const measurements = roastData.get(dataInformation.topicName);
-            return createLine(
-              maxDomain,
-              dataInformation,
-              measurements,
-              startTime,
-              false
-            );
-          })}
-          {referenceMeasurements &&
-            referenceTopicName &&
-            createLine(
-              maxDomain,
-              {
-                color: "blue",
-                topicName: referenceTopicName,
-                displayName: referenceTopicName + "(Ref.)",
-                show: false,
-              }, // probably better to use dashed lines
-              referenceMeasurements,
-              referenceMeasurements[0].x,
-              true
-            )}
-        </LineChart>
-      </ResponsiveContainer>
-    </>
+    <ResponsiveContainer>
+      <LineChart>
+        <CartesianGrid strokeDasharray="3 3" />
+        <YAxis
+          dataKey="y"
+          name="temperature"
+          unit="°C"
+          tickCount={5}
+          domain={[0, 200]}
+          hide={false}
+        />
+        <Legend />
+        <XAxis
+          dataKey="x"
+          xAxisId={0}
+          domain={[0, maxDomain]}
+          type={"number"}
+          tickCount={9}
+          tickFormatter={xTickFormatter}
+        />
+        {dataInformation?.map((dataInformation) => {
+          const measurements = roastData.get(dataInformation.topicName);
+          return createLine(
+            maxDomain,
+            dataInformation,
+            measurements,
+            startTime,
+            false
+          );
+        })}
+        {referenceMeasurements &&
+          referenceTopicName &&
+          createLine(
+            maxDomain,
+            {
+              color: "blue",
+              topicName: referenceTopicName,
+              displayName: referenceTopicName + "(Ref.)",
+              show: false,
+            }, // probably better to use dashed lines
+            referenceMeasurements,
+            referenceMeasurements[0].x,
+            true
+          )}
+      </LineChart>
+    </ResponsiveContainer>
   );
 };
 

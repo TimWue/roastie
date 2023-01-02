@@ -36,6 +36,17 @@ export const ArchiveTable: FunctionComponent = () => {
     return roastRepository.deleteRoast(id).then(loadRoasts);
   };
 
+  const calcWeightLoss = (
+    startWeight: number | undefined,
+    endWeight: number | undefined
+  ): string => {
+    if (startWeight === undefined || endWeight === undefined) {
+      return "--";
+    }
+    const weightLoss = 100 * (1 - endWeight / startWeight);
+    return weightLoss.toFixed(2) + "%";
+  };
+
   useEffect(loadRoasts, []);
 
   return (
@@ -53,6 +64,8 @@ export const ArchiveTable: FunctionComponent = () => {
               <TableCell>Datum</TableCell>
               <TableCell>Bewertung</TableCell>
               <TableCell>Hinzufügen</TableCell>
+              <TableCell>Start-Gewicht</TableCell>
+              <TableCell>Δ Gewicht</TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
@@ -83,6 +96,11 @@ export const ArchiveTable: FunctionComponent = () => {
                       }}
                       topicNames={Array.from(roast.data.keys())}
                     />
+                  </TableCell>
+
+                  <TableCell>{roast.startWeight ?? "--"}</TableCell>
+                  <TableCell>
+                    {calcWeightLoss(roast.startWeight, roast.endWeight)}
                   </TableCell>
                   <TableCell>
                     <Button onClick={() => deleteRoast(roast.id!)}>

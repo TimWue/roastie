@@ -36,7 +36,7 @@ export const DurationValue: FunctionComponent<Props> = ({ status }) => {
   }, [status]);
 
   return (
-    <Grid item xs={12}>
+    <Grid item>
       <Typography component="p" variant="h4" margin={0}>
         {time ? msToMS(time) : "--"}
       </Typography>

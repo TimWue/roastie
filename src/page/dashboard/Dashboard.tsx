@@ -6,16 +6,26 @@ import { Save } from "../saveRoast/Save";
 import { DurationValue } from "../details/DurationValue";
 import { Controls } from "../controls/Controls";
 import { MeasurementContext } from "../../infrastructure/MeasurementContext";
+import { Details } from "../details/Details";
 
 export function Dashboard() {
   const { measurementStatus } = useContext(MeasurementContext);
-  const controlHeight = 50;
 
   return (
     <Grid container flexWrap={"wrap"}>
-      <Grid item xs={12} height={`${controlHeight}px`}>
-        <Grid container flexWrap={"nowrap"} width={"100%"}>
+      <Grid item xs={12}>
+        <Grid
+          container
+          width={"100%"}
+          alignItems={"center"}
+          pt={"5px"}
+          pb={"5px"}
+          flexDirection={"row"}
+          flexWrap={"nowrap"}
+          justifyContent={"space-between"}
+        >
           <DurationValue status={measurementStatus} />
+          <Details />
           <Controls />
         </Grid>
       </Grid>

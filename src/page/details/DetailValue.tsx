@@ -1,9 +1,8 @@
 import * as React from "react";
 import { FunctionComponent } from "react";
 import Typography from "@mui/material/Typography";
-import Title from "../shared/Title";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
+import { useTheme } from "@mui/material";
 
 interface Props {
   value: number;
@@ -18,29 +17,39 @@ export const DetailValue: FunctionComponent<Props> = ({
   value,
   displayName,
 }) => {
+  const theme = useTheme();
+
   return (
-    <Grid item xs={12} width={"250px"}>
-      <Paper
-        sx={{
-          px: 1,
-          py: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          overflow: "hidden",
-        }}
-        variant={"outlined"}
+    <Grid item>
+      <Grid
+        container
+        p={"8px"}
+        borderRadius={"4px"}
+        columnGap={"10px"}
+        alignItems={"center"}
+        justifyContent={"center"}
+        border={`2px solid ${theme.palette.primary.main}`}
       >
-        <Title>
-          {title} [{unit}]
-        </Title>
-        <Typography component="p" variant="h4">
-          {value}
-        </Typography>
-        <Typography color="text.secondary" sx={{ flex: 1 }}>
-          {displayName}
-        </Typography>
-      </Paper>
+        <Grid item marginTop={"auto"} marginBottom={"auto"}>
+          <Grid container gap={"4px"}>
+            <Typography component="p" variant="h6">
+              {value}
+            </Typography>
+
+            <Typography component="p" variant="h6" color={"darkgray"}>
+              {unit}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Grid item marginTop={"auto"} marginBottom={"auto"}>
+          <Grid container flexDirection={"column"}>
+            <Grid item>{title}</Grid>
+            <Grid item fontWeight={"bold"}>
+              {displayName}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
     </Grid>
   );
 };

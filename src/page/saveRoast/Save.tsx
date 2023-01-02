@@ -43,6 +43,21 @@ export const Save: FunctionComponent = () => {
     });
   };
 
+  const setWeight = (
+    value: string,
+    setterFunc: (value: number | undefined) => void
+  ) => {
+    if (value.length === 0) {
+      setterFunc(undefined);
+      return;
+    }
+
+    const newWeight = Number(value);
+    if (!isNaN(newWeight)) {
+      setterFunc(newWeight);
+    }
+  };
+
   return (
     <Grid container rowSpacing={2} xs={12} direction={"column"}>
       <Grid item>
@@ -80,8 +95,8 @@ export const Save: FunctionComponent = () => {
             <TextField
               id="startWeight"
               label="Gewicht (Start)"
-              value={startWeight}
-              onChange={(e) => setStartWeight(Number(e.target.value))}
+              value={startWeight ?? ""}
+              onChange={(e) => setWeight(e.target.value, setStartWeight)}
               fullWidth
             />
           </Grid>
@@ -89,8 +104,8 @@ export const Save: FunctionComponent = () => {
             <TextField
               id="endWeight"
               label="Gewicht (Ende)"
-              value={endWeight}
-              onChange={(e) => setEndWeight(Number(e.target.value))}
+              value={endWeight ?? ""}
+              onChange={(e) => setWeight(e.target.value, setEndWeight)}
               fullWidth
             />
           </Grid>

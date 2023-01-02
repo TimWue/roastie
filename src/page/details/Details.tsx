@@ -22,26 +22,21 @@ export const Details: FunctionComponent = () => {
   }, [lastMeasurement]);
 
   return (
-    <Grid
-      container
-      rowSpacing={2}
-      xs={12}
-      alignItems={"center"}
-      display={"flex"}
-      flexDirection={"column"}
-    >
-      {Array.from(lastValues.keys()).map((key) => {
-        const value = lastValues.get(key);
-        if (!value) return <></>;
-        return (
-          <DetailValue
-            title={"Temperatur"}
-            unit={"°C"}
-            value={value}
-            displayName={key}
-          />
-        );
-      })}
+    <Grid item flexGrow={1}>
+      <Grid container flexDirection={"row"} justifyContent={"center"}>
+        {Array.from(lastValues.keys()).map((key) => {
+          const value = lastValues.get(key);
+          if (!value) return <></>;
+          return (
+            <DetailValue
+              title={"Temperatur"}
+              unit={"°C"}
+              value={value}
+              displayName={key}
+            />
+          );
+        })}
+      </Grid>
     </Grid>
   );
 };

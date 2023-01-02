@@ -39,6 +39,8 @@ const roastToRoastDto = (roast: Roast): RoastDto => {
     id: roast.id,
     name: roast.name,
     rating: roast.rating,
+    startWeight: roast.startWeight,
+    endWeight: roast.endWeight,
   };
 };
 
@@ -56,5 +58,7 @@ const roastDto2Roast = (roastDto: RoastDto): Roast => {
     id: roastDto.id,
     name: roastDto.name,
     rating: roastDto.rating,
+    startWeight: roastDto.startWeight,
+    endWeight: roastDto.endWeight,
   };
 };

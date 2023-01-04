@@ -16,13 +16,8 @@ export type MqttSettings = {
   topicNames: TopicName[];
 };
 
-export type DetailSettings = {
-  selectedTopic: TopicName;
-};
-
 export type Settings = {
   id: number;
   mqtt: MqttSettings;
-  details: DetailSettings;
   display: DisplaySettings;
 };

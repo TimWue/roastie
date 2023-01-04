@@ -79,13 +79,13 @@ export const DataInformationItem: FunctionComponent<Props> = ({
           onChange={(event) => {
             updateDisplayName(event.currentTarget.value);
           }}
-          style={{ width: "120px" }}
+          style={{ width: "130px" }}
         />
       </InputFrame>
       <InputFrame>
         <InputLabel>Farbe:</InputLabel>
 
-        <Grid container direction={"row"} width={"120px"}>
+        <Grid container direction={"row"} width={"130px"}>
           <Input
             placeholder={"Farbe"}
             value={dataInformation.color}

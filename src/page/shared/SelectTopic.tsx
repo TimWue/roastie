@@ -29,7 +29,7 @@ export const SelectTopic: FunctionComponent<Props> = ({
       value={selectedTopicValue}
       onChange={(event) => setTopic(event.target.value)}
       displayEmpty
-      style={{ width: "120px" }}
+      style={{ width: "130px" }}
     >
       {topicNames.map((topic) => {
         return <MenuItem value={topic}>{topic}</MenuItem>;

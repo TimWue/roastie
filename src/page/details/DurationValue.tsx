@@ -45,6 +45,7 @@ export const DurationValue: FunctionComponent<Props> = ({ status }) => {
       display={"flex"}
       justifyContent={"center"}
       alignItems={"center"}
+      m={"5px"}
     >
       <Typography component="p" variant="h4">
         {time ? msToMS(time) : "00:00"}

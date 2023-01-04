@@ -21,8 +21,8 @@ export function Dashboard() {
           pt={"5px"}
           pb={"5px"}
           flexDirection={"row"}
-          flexWrap={"nowrap"}
-          justifyContent={"space-between"}
+          flexWrap={"wrap"}
+          justifyContent={"start"}
         >
           <DurationValue status={measurementStatus} />
           <Details />

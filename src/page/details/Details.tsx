@@ -20,12 +20,7 @@ export const Details: FunctionComponent = () => {
 
   return (
     <Grid item flexGrow={1}>
-      <Grid
-        container
-        flexDirection={"row"}
-        justifyContent={"center"}
-        gap={"10px"}
-      >
+      <Grid container flexDirection={"row"} gap={"5px"}>
         {topicNames.map((topicName) => {
           return <DetailValue topicName={topicName} key={topicName} />;
         })}

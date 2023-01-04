@@ -86,6 +86,9 @@ export const DetailValue: FunctionComponent<Props> = ({ topicName }) => {
         justifyContent={"center"}
         bgcolor={"rgb(240,240,240)"}
         height={"70px"}
+        flexWrap={"nowrap"}
+        width={"fit-content"}
+        m={"5px"}
       >
         <Grid item>
           <Grid item fontWeight={"bold"} color={color}>

@@ -21,7 +21,7 @@ export const Controls: FunctionComponent = () => {
     <ButtonGroup
       variant="outlined"
       size={"small"}
-      sx={{ backgroundColor: "white", maxHeight: "40px" }}
+      sx={{ backgroundColor: "white", maxHeight: "40px", margin: "10px" }}
     >
       <Button
         onClick={startMeasurement}

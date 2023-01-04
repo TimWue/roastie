@@ -39,7 +39,7 @@ export const DataInformationItem: FunctionComponent<Props> = ({
       p={"5px"}
       style={{
         borderRadius: "10px",
-        backgroundColor: "rgb(230,230,230)",
+        backgroundColor: "rgb(240,240,240)",
         width: "220px",
       }}
       position={"relative"}

@@ -22,7 +22,7 @@ interface TopicMeasurement {
 
 interface ContextProps {
   roastData: RoastData;
-  lastMeasurement: TopicMeasurement | undefined;
+  currentMeasurement: TopicMeasurement | undefined;
   startMeasurement: () => void;
   stopMeasurement: () => void;
   resetMeasurement: () => void;
@@ -45,7 +45,8 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   children,
 }) => {
   const [topicNames, setTopicNames] = useState<string[]>([]);
-  const [lastMeasurement, setLastMeasurement] = useState<TopicMeasurement>();
+  const [currentMeasurement, setCurrentMeasurement] =
+    useState<TopicMeasurement>();
   const [roastData, setRoastData] = useState<RoastData>(new Map());
   const [measurementStatus, setMeasurementStatus] = useState(Status.IDLE);
   const [client, setClient] = useState<MqttClientConnection>();
@@ -70,7 +71,7 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
     topicName: string,
     measurement: Measurement
   ) => {
-    setLastMeasurement({ topicName, measurement });
+    setCurrentMeasurement({ topicName, measurement });
   };
 
   const startMeasurement = () => {
@@ -103,18 +104,18 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
   const resetState = () => {
     setStartTime(undefined);
     setMaxTime(undefined);
-    setLastMeasurement(undefined);
+    setCurrentMeasurement(undefined);
     setRoastData(new Map());
   };
 
   useEffect(() => {
-    if (lastMeasurement && measurementStatus == Status.RUNNING) {
+    if (currentMeasurement && measurementStatus == Status.RUNNING) {
       handleMeasurements(
-        lastMeasurement.topicName,
-        lastMeasurement.measurement
+        currentMeasurement.topicName,
+        currentMeasurement.measurement
       );
     }
-  }, [lastMeasurement]);
+  }, [currentMeasurement]);
 
   return (
     <MeasurementContext.Provider
@@ -125,7 +126,7 @@ export const MeasurementContextProvider: FunctionComponent<ProviderProps> = ({
         roastData,
         subscribeToMeasurements,
         unsubscribeFromMeasurements,
-        lastMeasurement,
+        currentMeasurement,
         measurementStatus,
         startTime,
         maxTime,

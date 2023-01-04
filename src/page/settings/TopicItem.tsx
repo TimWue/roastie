@@ -21,7 +21,7 @@ export const TopicNameItem: FunctionComponent<Props> = ({
       container
       direction={"column"}
       p={"5px"}
-      style={{ borderRadius: "10px", backgroundColor: "rgba(0,0,0,0.075)" }}
+      style={{ borderRadius: "10px", backgroundColor: "rgb(240,240,240)" }}
     >
       <Grid item p={"5px"}>
         <Input

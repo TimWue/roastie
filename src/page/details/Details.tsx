@@ -1,40 +1,33 @@
 import * as React from "react";
-import { FunctionComponent, useContext, useEffect, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { DetailValue } from "./DetailValue";
 import Grid from "@mui/material/Grid";
-import { MeasurementContext } from "../../infrastructure/MeasurementContext";
+import { settingsRepository } from "../../domain/settings/SettingsRepository";
+import { TopicName } from "../../domain/settings/Settings";
 
 export const Details: FunctionComponent = () => {
-  const [lastValues, setLastValues] = useState(new Map<string, number>());
-  const { lastMeasurement } = useContext(MeasurementContext);
+  const [topicNames, setTopicNames] = useState<TopicName[]>([]);
 
   useEffect(() => {
-    lastMeasurement?.measurement &&
-      lastMeasurement?.topicName &&
-      setLastValues(
-        new Map(
-          lastValues.set(
-            lastMeasurement?.topicName,
-            lastMeasurement?.measurement.y
-          )
-        )
+    settingsRepository.getSettings().then((settings) => {
+      setTopicNames(
+        settings.display.dataInformation
+          .filter((dataInformation) => dataInformation.show)
+          .map((dataInformation) => dataInformation.topicName)
       );
-  }, [lastMeasurement]);
+    });
+  }, []);
 
   return (
     <Grid item flexGrow={1}>
-      <Grid container flexDirection={"row"} justifyContent={"center"}>
-        {Array.from(lastValues.keys()).map((key) => {
-          const value = lastValues.get(key);
-          if (!value) return <></>;
-          return (
-            <DetailValue
-              title={"Temperatur"}
-              unit={"°C"}
-              value={value}
-              displayName={key}
-            />
-          );
+      <Grid
+        container
+        flexDirection={"row"}
+        justifyContent={"center"}
+        gap={"10px"}
+      >
+        {topicNames.map((topicName) => {
+          return <DetailValue topicName={topicName} key={topicName} />;
         })}
       </Grid>
     </Grid>

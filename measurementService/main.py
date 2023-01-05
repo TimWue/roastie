@@ -38,9 +38,17 @@ if SAVE_TO_FILE:
     logging.basicConfig(filename=LOG_FILE_NAME, level=logging.DEBUG)
 else:
     logging.basicConfig(level=LOG_LEVEL)
-
+    
 if CONNECT_MQTT:
-    client = connect_mqtt(MQTT_CLIENT_NAME, MQTT_BROKER_NAME)
+    isConnected = False
+    
+    while not isConnected:
+        try:
+            client = connect_mqtt(MQTT_CLIENT_NAME, MQTT_BROKER_NAME)
+            isConnected = True
+        except:
+            logging.warning("Could not connect to mqtt broker. Trying again...")
+            time.sleep(5)
 
 mbclient = connect_modbus(MODBUS_IP, MODBUS_PORT)
 logging.info("Connected to " + MODBUS_IP + " on Port " + str(MODBUS_PORT))

@@ -5,7 +5,7 @@ import random
 import time
 
 # CONFIGS
-SENSOR_NAMES = ['sensor1', 'sensor2', 'sensor3']
+SENSOR_NAMES = ['sensor1-test', 'sensor2-test', 'sensor3-test']
 
 # MQTT
 CONNECT_MQTT = True
@@ -45,6 +45,7 @@ if CONNECT_MQTT:
             isConnected = True
         except:
             logging.warn("Could not connect to mqtt broker. Trying again...")
+            time.sleep(5)
 
 logging.info("Not connected to modbus. Test-Script selected!")
 

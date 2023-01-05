@@ -60,6 +60,7 @@ while True:
             try:
                 client.publish(SENSOR_NAMES[i], tempdata)
                 logging.info("Published " + str(testValue[i]) + " °C, from Sensor: " + SENSOR_NAMES[i])
+                time.sleep(1)
             except:
                 logging.warning('Failed to publish to mqtt')
                 client.disconnect()

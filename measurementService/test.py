@@ -37,7 +37,14 @@ else:
     logging.basicConfig(level=LOG_LEVEL)
 
 if CONNECT_MQTT:
-    client = connect_mqtt(MQTT_CLIENT_NAME, MQTT_BROKER_NAME)
+    isConnected = False
+    
+    while !isConnected:
+        try:
+            client = connect_mqtt(MQTT_CLIENT_NAME, MQTT_BROKER_NAME)
+            isConnected = True
+        except:
+            logging.warn("Could not connect to mqtt broker. Trying again...")
 
 logging.info("Not connected to modbus. Test-Script selected!")
 

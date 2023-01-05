@@ -39,7 +39,7 @@ else:
 if CONNECT_MQTT:
     isConnected = False
     
-    while !isConnected:
+    while not isConnected:
         try:
             client = connect_mqtt(MQTT_CLIENT_NAME, MQTT_BROKER_NAME)
             isConnected = True

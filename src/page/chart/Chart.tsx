@@ -58,7 +58,7 @@ export const Chart: FunctionComponent = () => {
           name="temperature"
           unit="°C"
           tickCount={5}
-          domain={[0, 200]}
+          domain={[0, 300]}
           hide={false}
         />
         <Legend />

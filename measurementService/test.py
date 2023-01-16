@@ -1,16 +1,17 @@
 import json
 import logging
-import paho.mqtt.client as mqtt
 import random
 import time
 
+import paho.mqtt.client as mqtt
+
 # CONFIGS
-SENSOR_NAMES = ['sensor1-test', 'sensor2-test', 'sensor3-test']
+SENSOR_NAMES = ['roastie-sensor1-test', 'roastie-sensor2-test', 'roastie-sensor3-test']
 
 # MQTT
 CONNECT_MQTT = True
 MQTT_CLIENT_NAME = "ModbusClient"
-MQTT_BROKER_NAME = "localhost"
+MQTT_BROKER_NAME = "test.mosquitto.org"
 
 # LOGGING
 SAVE_TO_FILE = False
@@ -20,7 +21,7 @@ LOG_FILE_NAME = "modbus-test.log"
 # PROGRAM
 def connect_mqtt(client_name, broker_name):
     client_mqtt = mqtt.Client(client_name)
-    client_mqtt.connect(broker_name)
+    client_mqtt.connect(host=broker_name, port=1883)
     return client_mqtt
 
 def updateValue(oldValue):
@@ -58,7 +59,7 @@ while True:
         tempdata = json.dumps(data)
         if CONNECT_MQTT:
             try:
-                client.publish(SENSOR_NAMES[i], tempdata)
+                client.publish(SENSOR_NAMES[i], tempdata, qos=0)
                 logging.info("Published " + str(testValue[i]) + " °C, from Sensor: " + SENSOR_NAMES[i])
                 time.sleep(1)
             except:

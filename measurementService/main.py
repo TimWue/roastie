@@ -1,20 +1,21 @@
 import json
 import logging
-import paho.mqtt.client as mqtt
 import time
+
+import paho.mqtt.client as mqtt
 from pymodbus.client.sync import ModbusTcpClient
 
 # CONFIGS
 # MODBUS
 MODBUS_IP = '192.168.178.250'
 MODBUS_PORT = 502
-SENSOR_NAMES = ['sensor1', 'sensor2', 'sensor3']
+SENSOR_NAMES = ['roastie-sensor1', 'roastie-sensor2', 'roastie-sensor3']
 MODBUS_REGISTER_ADDRESSES = [1000, 2000, 3000]
 
 # MQTT
 CONNECT_MQTT = True
 MQTT_CLIENT_NAME = "ModbusClient"
-MQTT_BROKER_NAME = "localhost"
+MQTT_BROKER_NAME = "test.mosquitto.org"
 
 # LOGGING
 SAVE_TO_FILE = True
@@ -30,7 +31,7 @@ def connect_modbus(ip, port):
 
 def connect_mqtt(client_name, broker_name):
     client_mqtt = mqtt.Client(client_name)
-    client_mqtt.connect(broker_name)
+    client_mqtt.connect(host=broker_name, port=1883)
     return client_mqtt
 
 
@@ -73,7 +74,7 @@ while True:
         tempdata = json.dumps(data)
         if CONNECT_MQTT:
             try:
-                client.publish(SENSOR_NAMES[i], tempdata)
+                client.publish(SENSOR_NAMES[i], tempdata, qos=0)
                 logging.info("Published " + str(rectemp) + " °C, from Sensor: " + SENSOR_NAMES[i])
             except:
                 logging.warning('Failed to publish to mqtt')

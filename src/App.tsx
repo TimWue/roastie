@@ -4,7 +4,7 @@ import { ContentFrame } from "./page/content-frame/ContentFrame";
 
 function App() {
   return (
-    <BrowserRouter basename={"/Roastie_V2"}>
+    <BrowserRouter basename={"roastie"}>
       <ContentFrame />
     </BrowserRouter>
   );

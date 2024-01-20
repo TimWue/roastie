@@ -23,7 +23,7 @@ export class MqttClientConnection {
         y: Number(Number(messageObject.value).toFixed(2)),
       };
 
-      console.log("Received measurement: " + JSON.stringify(measurement));
+      console.log("Received measurement ("+ topic+"): " + JSON.stringify(measurement));
       handler(topic, measurement);
     });
   }

@@ -57,7 +57,7 @@ export const Chart: FunctionComponent = () => {
           dataKey="y"
           name="temperature"
           unit="°C"
-          tickCount={5}
+          ticks={[25, 50,75, 100,125, 150,175, 200,225, 250,275, 300]}
           domain={[0, 300]}
           hide={false}
         />
@@ -129,7 +129,7 @@ const createLine = (
           name={dataInformation.displayName}
           dot={false}
           strokeDasharray={isReference ? 4 : undefined}
-          strokeWidth={5}
+          strokeWidth={3}
         />
       )}
     </>

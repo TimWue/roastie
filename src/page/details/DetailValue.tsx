@@ -25,7 +25,6 @@ export const DetailValue: FunctionComponent<Props> = ({ topicName }) => {
   ): number => {
     const xDiffMinutes = (newMeasurement.x - oldMeasurement.x) * secToMinFactor;
     const yDiff = newMeasurement.y - oldMeasurement.y;
-    console.log(yDiff / xDiffMinutes);
     return yDiff / xDiffMinutes;
   };
 
@@ -52,10 +51,12 @@ export const DetailValue: FunctionComponent<Props> = ({ topicName }) => {
         );
       }
       setCurrentMeasurement(measurementOfAnyTopic.measurement);
+      console.log(measurementOfAnyTopic.topicName +":" + measurementOfAnyTopic.measurement.y )
     }
   }, [measurementOfAnyTopic]);
 
   const renderValue = (value: number | undefined, unit: string) => {
+    console.log("rendering:" + topicName)
     return (
       <Grid item flexDirection={"row"} flexWrap={"nowrap"} display={"flex"}>
         <Typography component="p" variant="h6">
